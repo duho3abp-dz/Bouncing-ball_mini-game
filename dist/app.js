@@ -381,42 +381,188 @@ module.exports = function (list, options) {
 /*!************************!*\
   !*** ./src/js/main.js ***!
   \************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _modules_animateBall__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/animateBall */ "./src/js/modules/animateBall.js");
+/* harmony import */ var _modules_crashTest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/crashTest */ "./src/js/modules/crashTest.js");
 
 
-const gameWindow = document.createElement('div'),
-      gameBall = document.createElement('div'),
-      popup = document.createElement('div'),
-      numberObstaclesFinish = 10;
-let intervalStart,
-    heightBounce = 0,
-    passed = 0,
-    stop = false;
 
-const message = {
-    greeting: 'Мини-игра "Прыгающий мяч"',
-    victory: 'Победа!',
-    defeat: 'К сожалению не получилось, попробуйте еще раз'
+
+
+const game = ({
+    numberObstaclesFinish,
+    obstacleRefreshRate,
+    message
+}) => {
+
+    // --------------------------------------------------------
+    // -------------------------STATE-------------------------
+
+    let intervalStart,
+        passed = 0,
+        stop = false,
+        counter = 0;
+
+    // --------------------------------------------------------
+    // -------------------------LOGIC-------------------------
+
+    const winningOrLosingAction = (position, mess) => {
+        document.querySelector('.popup-content').innerHTML = `<h1>${message[mess]}</h1>`;
+        clearInterval(intervalStart);
+        position = position;
+        stop = true;
+        gameWindow.style.display = 'none';
+        popup.style.display = 'flex';
+    };
+
+    const animateObstacle = (elem, position, widthObs, heightObs) => {
+        if (!stop) {
+            const obj = Object(_modules_crashTest__WEBPACK_IMPORTED_MODULE_1__["default"])(elem, widthObs, heightObs, gameBall);
+            if (obj) {
+                const {finish, defeat, count} = obj;
+                if (count) {
+                    document.querySelector('.counter').innerHTML = `
+                        ОЧКИ:
+                        <p>${counter++}</p>
+                    `;
+                }
+                if (defeat) {
+                    winningOrLosingAction(position, 'defeat');
+                    return;
+                }
+                if (finish) {
+                    winningOrLosingAction(position, 'victory');
+                    return;
+                }
+            }
+        
+            position = position + 5;
+            elem.style.left = `${position}px`;
+            requestAnimationFrame(() => animateObstacle(elem, position, widthObs, heightObs));
+        }
+    };
+
+    const createObstacleAndStartAnimate = () => {
+        const obstacle = document.createElement('div'),
+              randomHeight = Math.floor(Math.random() * 300 + 50),
+              randomWidth = Math.floor(Math.random() * 80 + 5);
+        let position = -80;
+
+        passed++;
+        if (passed === numberObstaclesFinish) {
+            obstacle.style.background = 'gray';
+        }
+
+        obstacle.classList.add('game__obstacle');
+        obstacle.style.height = `${randomHeight}px`;
+        obstacle.style.width = `${randomWidth}px`;
+
+        gameWindow.append(obstacle);
+
+        requestAnimationFrame(() => animateObstacle(obstacle, position, randomWidth, randomHeight));
+    };
+
+    const startGame = () => {
+        document.querySelectorAll('.game__obstacle').forEach(elem => elem.remove());
+
+        passed = 0;
+        stop = false;
+        popup.style.display = 'none';
+        gameWindow.style.display = 'block';
+
+        intervalStart = setInterval(createObstacleAndStartAnimate, obstacleRefreshRate);   
+    };
+
+    // --------------------------------------------------------
+    // -------------------------CREATE-------------------------
+
+    const gameWindow = document.createElement('div'),
+          gameBall = document.createElement('div'),
+          popup = document.createElement('div');
+
+    // --------------------------------------------------------
+    // -------------------------RENDER-------------------------
+
+    popup.classList.add('game__popup');
+    popup.innerHTML = `
+        <div class="popup-content"> 
+            <h1>${message.greeting}</h1><hr>
+            <h3>Q - маленький прыжок</h3>
+            <h3>W - средний прыжок</h3>
+            <h3>E - высокий прыжок</h3><hr>
+            <h2>Ваша задача преодолеть ${numberObstaclesFinish} препятствий</h2>
+        </div>
+        <div class="btn">НАЧАТЬ</div>
+    `;
+    document.body.append(popup);
+
+    gameWindow.classList.add('game__window');
+    gameWindow.innerHTML = `
+        <div class="counter">
+            ОЧКИ:
+            <p>${counter}</p>
+        </div>
+    `;
+    document.body.append(gameWindow);
+
+    gameBall.classList.add('game__ball');
+    gameBall.innerHTML = `
+        <div class="flare"></div>
+        <div class="shadow"></div>
+    `;
+    gameWindow.append(gameBall);
+
+    // --------------------------------------------------------
+    // -------------------------EVENT-------------------------
+
+    document.querySelector('.btn').addEventListener('click', () => startGame());
+
+    document.addEventListener('keydown', event => {
+        Object(_modules_animateBall__WEBPACK_IMPORTED_MODULE_0__["default"])({event, 
+            keyCode: 81, 
+            element: gameBall,
+            maxHeight: 200
+        });
+        Object(_modules_animateBall__WEBPACK_IMPORTED_MODULE_0__["default"])({event, 
+            keyCode: 87, 
+            element: gameBall,
+            maxHeight: 300
+        });
+        Object(_modules_animateBall__WEBPACK_IMPORTED_MODULE_0__["default"])({event, 
+            keyCode: 69, 
+            element: gameBall,
+            maxHeight: 450
+        });
+
+        if (event.keyCode === 13) {
+            if (window.getComputedStyle(popup).display === 'flex') {
+                startGame();
+            }
+        }
+    });
+
 };
 
-popup.classList.add('game__popup');
-popup.innerHTML = `
-    <div class="popup-content"> 
-        <h1>${message.greeting}</h1>
-        <p>Ваша задача преодолеть ${numberObstaclesFinish} препятствий</p>
-    </div>
-    <div class="btn">НАЧАТЬ</div>
-`;
-document.body.append(popup);
+/* harmony default export */ __webpack_exports__["default"] = (game);
 
-gameWindow.classList.add('game__window');
-document.body.append(gameWindow);
+/***/ }),
 
-gameBall.classList.add('game__ball');
-gameWindow.append(gameBall);
+/***/ "./src/js/modules/animateBall.js":
+/*!***************************************!*\
+  !*** ./src/js/modules/animateBall.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+
+let heightBounce = 0;
 
 const animateBallDown = (ball, speed) => {
     heightBounce = heightBounce - speed;
@@ -431,7 +577,7 @@ const animateBallDown = (ball, speed) => {
 };
 
 const animateBallUp = ({
-    elem, 
+    element, 
     startSpeed, 
     deceleration, 
     maxHeight, 
@@ -439,111 +585,42 @@ const animateBallUp = ({
 }) => {
     if (deceleration) {
         heightBounce = heightBounce + deceleration;
-        elem.style.bottom = `${heightBounce}px`;    
+        element.style.bottom = `${heightBounce}px`;    
     } else {
         heightBounce = heightBounce + startSpeed;
-        elem.style.bottom = `${heightBounce}px`;
+        element.style.bottom = `${heightBounce}px`;
     }
 
     if (heightBounce < maxHeight-100) {
-        requestAnimationFrame(() => animateBallUp({elem, startSpeed, descent, maxHeight}));
+        requestAnimationFrame(() => animateBallUp({element, startSpeed, descent, maxHeight}));
     }
     if (heightBounce >= maxHeight - 100 && heightBounce < maxHeight - 30) {
-        requestAnimationFrame(() => animateBallUp({elem, startSpeed, descent, maxHeight,
+        requestAnimationFrame(() => animateBallUp({element, startSpeed, descent, maxHeight,
             deceleration: 5
         }));
     }
     if (heightBounce >= maxHeight-30 && heightBounce < maxHeight) {
-        requestAnimationFrame(() => animateBallUp({elem, startSpeed, descent, maxHeight,
+        requestAnimationFrame(() => animateBallUp({element, startSpeed, descent, maxHeight,
             deceleration: 1
         }));
     }
     if (heightBounce >= maxHeight) {
-        requestAnimationFrame(() => animateBallDown(elem, startSpeed));
+        requestAnimationFrame(() => animateBallDown(element, startSpeed));
     }
 };
 
-const roundTheNumber = (num) => Math.floor(+num.replace(/px/, ''));
-
-const crashTest = (elem, widthObs, heightObs) => {
-    const leftStyleBall = window.getComputedStyle(gameBall).left,
-          leftStyleObstacle = elem.style.left,
-          bottomStyleBall = roundTheNumber(gameBall.style.bottom);
-
-    if (elem.style.background === 'gray' &&
-        roundTheNumber(leftStyleBall) <= roundTheNumber(leftStyleObstacle) + widthObs &&
-        roundTheNumber(leftStyleBall) + 50 >= roundTheNumber(leftStyleObstacle) + widthObs ) {
-        return {
-            finish: true,
-            defeat: false
-        };
-    }
-    if (roundTheNumber(leftStyleBall) <= roundTheNumber(leftStyleObstacle) + widthObs &&
-        roundTheNumber(leftStyleBall) + 50 >= roundTheNumber(leftStyleObstacle) + widthObs &&
-        bottomStyleBall <= heightObs) {
-        return {
-            finish: false,
-            defeat: true
-        };
-    }
-};
-
-const animateObstacle = (elem, x, widthObs, heightObs) => {
-    if (!stop) {
-        const obj = crashTest(elem, widthObs, heightObs);
-        if (obj) {
-            const {finish, defeat} = obj;
-            if (defeat) {
-                document.querySelector('.popup-content').innerHTML = `<h1>${message.defeat}</h1>`;
-                clearInterval(intervalStart);
-                x = x;
-                stop = true;
-                gameWindow.style.display = 'none';
-                popup.style.display = 'flex';
-                return;
-            }
-            if (finish) {
-                document.querySelector('.popup-content').innerHTML = `<h1>${message.victory}</h1>`;
-                clearInterval(intervalStart);
-                x = x;
-                stop = true;
-                gameWindow.style.display = 'none';
-                popup.style.display = 'flex';
-                return;
-            }
-        }
-    
-        x = x + 5;
-        elem.style.left = `${x}px`;
-        requestAnimationFrame(() => animateObstacle(elem, x, widthObs, heightObs));
-    }
-};
-
-const createObstacleAndStartAnimate = () => {
-    const obstacle = document.createElement('div'),
-          randomHeight = Math.floor(Math.random() * 300 + 50),
-          randomWidth = Math.floor(Math.random() * 80 + 5);
-    let x = -60;
-
-    passed++;
-    if (passed === numberObstaclesFinish) {
-        obstacle.style.background = 'gray';
-    }
-
-    obstacle.classList.add('game__obstacle');
-    obstacle.style.height = `${randomHeight}px`;
-    obstacle.style.width = `${randomWidth}px`;
-
-    gameWindow.append(obstacle);
-
-    requestAnimationFrame(() => animateObstacle(obstacle, x, randomWidth, randomHeight));
-};
-
-const startAnimateBall = (e, keyCode, elem, startSpeed, maxHeight, descent) => {
-    if (e.keyCode === keyCode) {
-        if (elem.style.bottom === '0px' || elem.style.bottom === '') {
+const startAnimateBall = ({
+    event, 
+    keyCode, 
+    element, 
+    startSpeed = 10, 
+    maxHeight, 
+    descent = 5
+}) => {
+    if (event.keyCode === keyCode) {
+        if (element.style.bottom === '0px' || element.style.bottom === '') {
             requestAnimationFrame(() => animateBallUp({
-                elem,
+                element,
                 startSpeed, 
                 maxHeight,
                 descent
@@ -552,21 +629,54 @@ const startAnimateBall = (e, keyCode, elem, startSpeed, maxHeight, descent) => {
     }
 };
 
-document.querySelector('.btn').addEventListener('click', async () => {
-    document.querySelectorAll('.game__obstacle').forEach(elem => elem.remove());
-    passed = 0;
-    stop = false;
+/* harmony default export */ __webpack_exports__["default"] = (startAnimateBall);
 
-    popup.style.display = 'none';
-    gameWindow.style.display = 'block';
-    intervalStart = setInterval(createObstacleAndStartAnimate, 2000);    
-});
+/***/ }),
 
-document.addEventListener('keydown', e => {
-    startAnimateBall(e, 81, gameBall, 10, 200, 5);
-    startAnimateBall(e, 87, gameBall, 10, 300, 5);
-    startAnimateBall(e, 69, gameBall, 10, 450, 5);
-});
+/***/ "./src/js/modules/crashTest.js":
+/*!*************************************!*\
+  !*** ./src/js/modules/crashTest.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+
+const roundTheNumber = (num) => Math.floor(+num.replace(/px/, ''));
+
+const crashTest = (elem, widthObs, heightObs, gameBall) => {
+    const leftStyleBall = roundTheNumber(window.getComputedStyle(gameBall).left),
+          leftStyleObstacle = roundTheNumber(elem.style.left),
+          bottomStyleBall = roundTheNumber(gameBall.style.bottom);
+
+    if (elem.style.background === 'gray' &&
+        leftStyleBall <= leftStyleObstacle + widthObs &&
+        leftStyleBall + 50 >= leftStyleObstacle + widthObs ) {
+        return {
+            finish: true,
+            defeat: false
+        };
+    }
+    if (leftStyleBall <= leftStyleObstacle + widthObs &&
+        leftStyleBall + 50 >= leftStyleObstacle + widthObs &&
+        bottomStyleBall <= heightObs) {
+        return {
+            finish: false,
+            defeat: true
+        };
+    } else if (leftStyleBall <= leftStyleObstacle + widthObs &&
+               leftStyleBall + 50 >= leftStyleObstacle + widthObs) {
+        return {
+            finish: false,
+            defeat: false,
+            count: true
+        };
+    }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (crashTest);
 
 /***/ }),
 
@@ -582,8 +692,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scss_main_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./scss/main.scss */ "./src/scss/main.scss");
 /* harmony import */ var _scss_main_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_scss_main_scss__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _js_main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/main */ "./src/js/main.js");
-/* harmony import */ var _js_main__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_js_main__WEBPACK_IMPORTED_MODULE_1__);
 
+
+
+
+window.addEventListener('DOMContentLoaded', () => {
+
+    Object(_js_main__WEBPACK_IMPORTED_MODULE_1__["default"])({
+        numberObstaclesFinish: 15,
+        obstacleRefreshRate: 2000,
+        message: {
+            greeting: 'Мини-игра "Прыгающий мяч"',
+            victory: 'Победа!',
+            defeat: 'К сожалению не получилось, попробуйте еще раз'
+        }
+    });
+
+});
 
 
 /***/ }),

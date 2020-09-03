@@ -1,5 +1,3 @@
-// $bg-color: pink;
-
 body {
     width: 100vw;
     height: 100vh;
@@ -18,15 +16,58 @@ body {
         overflow: hidden;
         position: relative;
         display: none;
+
+        & .counter {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Sans MS';
+            font-size: 16px;
+            background: #000;
+            color: #fff;
+            border-radius: 5px;
+            width: 8%;
+            height: 100px;
+            top: 5px;
+            right: 5px;
+
+            & p {
+                font-size: 25px;
+                margin: 2px 0;
+            }
+        }
     }
     &__ball {
         height: 50px;
         width: 50px;
         background: #000;
         position: absolute;
+        box-shadow: rgba(0, 0, 0, 0.425) -56px 55px 25px;
         bottom: 0px;
         left: 50%;
         border-radius: 50%;
+
+        &  .flare {
+            background: #fff;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            border-radius: 50%;
+            top: 7px;
+            left: 20px;
+            opacity: .7;
+        }
+        & .shadow {
+            background: #000;
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            border-radius: 50%;
+            top: 8px;
+            left: 10px;
+        }
     }
     &__obstacle {
         background: #000;
@@ -39,7 +80,7 @@ body {
     &__popup {
         background: #fff;
         width: 50%;
-        height: 300px;
+        height: 550px;
         border-radius: 5px;
         display: flex;
         flex-direction: column;
@@ -51,7 +92,6 @@ body {
         & .popup-content {
             font-family: 'Comic Sans MS';
             font-size: 18px;
-            margin-bottom: 50px;
         }
         & .btn {
             font-family: 'Comic Sans MS';

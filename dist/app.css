@@ -14,15 +14,51 @@ body {
   overflow: hidden;
   position: relative;
   display: none; }
+  .game__window .counter {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Comic Sans MS';
+    font-size: 16px;
+    background: #000;
+    color: #fff;
+    border-radius: 5px;
+    width: 8%;
+    height: 100px;
+    top: 5px;
+    right: 5px; }
+    .game__window .counter p {
+      font-size: 25px;
+      margin: 2px 0; }
 
 .game__ball {
   height: 50px;
   width: 50px;
   background: #000;
   position: absolute;
+  box-shadow: rgba(0, 0, 0, 0.425) -56px 55px 25px;
   bottom: 0px;
   left: 50%;
   border-radius: 50%; }
+  .game__ball .flare {
+    background: #fff;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    border-radius: 50%;
+    top: 7px;
+    left: 20px;
+    opacity: .7; }
+  .game__ball .shadow {
+    background: #000;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    border-radius: 50%;
+    top: 8px;
+    left: 10px; }
 
 .game__obstacle {
   background: #000;
@@ -35,7 +71,7 @@ body {
 .game__popup {
   background: #fff;
   width: 50%;
-  height: 300px;
+  height: 550px;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
@@ -45,8 +81,7 @@ body {
   overflow: hidden; }
   .game__popup .popup-content {
     font-family: 'Comic Sans MS';
-    font-size: 18px;
-    margin-bottom: 50px; }
+    font-size: 18px; }
   .game__popup .btn {
     font-family: 'Comic Sans MS';
     font-size: 25px;
