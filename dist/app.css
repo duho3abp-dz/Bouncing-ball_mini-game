@@ -28,7 +28,8 @@ body {
     width: 8%;
     height: 100px;
     top: 5px;
-    right: 5px; }
+    right: 5px;
+    z-index: 10; }
     .game__window .counter p {
       font-size: 25px;
       margin: 2px 0; }
@@ -38,10 +39,10 @@ body {
   width: 50px;
   background: #000;
   position: absolute;
-  box-shadow: rgba(0, 0, 0, 0.425) -56px 55px 25px;
   bottom: 0px;
   left: 50%;
-  border-radius: 50%; }
+  border-radius: 50%;
+  z-index: 15; }
   .game__ball .flare {
     background: #fff;
     width: 20px;
@@ -66,7 +67,8 @@ body {
   left: -60px;
   bottom: 0px;
   border-top-right-radius: 10px;
-  border-top-left-radius: 10px; }
+  border-top-left-radius: 10px;
+  z-index: 20; }
 
 .game__popup {
   background: #fff;
@@ -82,7 +84,7 @@ body {
   .game__popup .popup-content {
     font-family: 'Comic Sans MS';
     font-size: 18px; }
-  .game__popup .btn {
+  .game__popup .btn-options {
     font-family: 'Comic Sans MS';
     font-size: 25px;
     background: #000;
@@ -90,6 +92,253 @@ body {
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer; }
+
+.game__options {
+  background: #fff;
+  width: 50%;
+  height: 550px;
+  border-radius: 5px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  display: none; }
+  .game__options .options__content {
+    font-family: 'Comic Sans MS';
+    font-size: 18px; }
+  .game__options .options__wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center; }
+    .game__options .options__wrap .btn-quantity {
+      font-size: 25px;
+      background: #000;
+      color: #fff;
+      border-radius: 5px;
+      border: black 5px solid;
+      padding: 5px 10px;
+      cursor: pointer; }
+  .game__options .btn {
+    font-family: 'Comic Sans MS';
+    font-size: 25px;
+    background: #000;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer; }
+
+.decor_one {
+  width: 100px;
+  height: 450px;
+  background: #cccbcb;
+  position: absolute;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border: black solid 1px;
+  bottom: -5px;
+  left: -30%;
+  animation-name: one-animate;
+  animation-duration: 10s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite; }
+
+@keyframes one-animate {
+  0% {
+    left: -30%; }
+  100% {
+    left: 130%; } }
+
+.decor_two {
+  width: 70px;
+  height: 490px;
+  background: #b4b2b2;
+  position: absolute;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  left: 0%;
+  border: black solid 1px;
+  bottom: -5px;
+  animation-name: two-animate;
+  animation-duration: 15s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite; }
+
+@keyframes two-animate {
+  0% {
+    left: -30%; }
+  100% {
+    left: 130%; } }
+
+.decor_three {
+  width: 500px;
+  height: 350px;
+  background: #cfcece;
+  position: absolute;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border: black solid 1px;
+  left: 10%;
+  bottom: -5px;
+  animation-name: three-animate;
+  animation-duration: 17s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite; }
+
+@keyframes three-animate {
+  0% {
+    left: -60%; }
+  100% {
+    left: 130%; } }
+
+.decor_four {
+  width: 200px;
+  height: 495px;
+  background: #c9c7c7;
+  position: absolute;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border: black solid 1px;
+  left: 10%;
+  bottom: -5px;
+  animation-name: four-animate;
+  animation-duration: 16s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite; }
+
+@keyframes four-animate {
+  0% {
+    left: -30%; }
+  100% {
+    left: 130%; } }
+
+.decor_five {
+  width: 150px;
+  height: 425px;
+  background: #e4e1e1;
+  position: absolute;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border: black solid 1px;
+  left: 10%;
+  bottom: -5px;
+  animation-name: five-animate;
+  animation-duration: 13s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite; }
+
+@keyframes five-animate {
+  0% {
+    left: -30%; }
+  100% {
+    left: 130%; } }
+
+.decor_six {
+  width: 150px;
+  height: 470px;
+  background: #d3d1d1;
+  position: absolute;
+  border-top-left-radius: 70px;
+  border-top-right-radius: 70px;
+  border: black solid 1px;
+  left: 10%;
+  bottom: -5px;
+  animation-name: six-animate;
+  animation-duration: 5s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite; }
+
+@keyframes six-animate {
+  0% {
+    left: -30%; }
+  100% {
+    left: 130%; } }
+
+.decor_seven {
+  width: 400px;
+  height: 200px;
+  background: #f3f1f1;
+  position: absolute;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border: black solid 1px;
+  left: 10%;
+  bottom: -5px;
+  animation-name: seven-animate;
+  animation-duration: 7s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite; }
+
+@keyframes seven-animate {
+  0% {
+    left: -50%; }
+  100% {
+    left: 130%; } }
+
+.decor_eight {
+  width: 250px;
+  height: 470px;
+  background: #dfdede;
+  position: absolute;
+  border-top-left-radius: 90px;
+  border-top-right-radius: 90px;
+  border: black solid 1px;
+  left: 10%;
+  bottom: -5px;
+  animation-name: eight-animate;
+  animation-duration: 9s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite; }
+
+@keyframes eight-animate {
+  0% {
+    left: -50%; }
+  100% {
+    left: 130%; } }
+
+.decor_nine {
+  width: 120px;
+  height: 440px;
+  background: #d1d0d0;
+  position: absolute;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border: black solid 1px;
+  left: 10%;
+  bottom: -5px;
+  animation-name: nine-animate;
+  animation-duration: 8s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite; }
+
+@keyframes nine-animate {
+  0% {
+    left: -50%; }
+  100% {
+    left: 130%; } }
+
+.decor_ten {
+  width: 500px;
+  height: 380px;
+  background: #c9c7c7;
+  position: absolute;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border: black solid 1px;
+  left: 10%;
+  bottom: -5px;
+  animation-name: ten-animate;
+  animation-duration: 12s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite; }
+
+@keyframes ten-animate {
+  0% {
+    left: -60%; }
+  100% {
+    left: 130%; } }
 
 
 /*# sourceMappingURL=app.css.map*/

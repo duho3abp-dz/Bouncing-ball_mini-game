@@ -2,6 +2,7 @@
 
 import startAnimateBall from './modules/animateBall';
 import crashTest from './modules/crashTest';
+import background from './modules/backgroundAnimate';
 
 const game = ({
     numberObstaclesFinish,
@@ -15,13 +16,19 @@ const game = ({
     let intervalStart,
         passed = 0,
         stop = false,
-        counter = 0;
+        counter = 0,
+        finish = numberObstaclesFinish[0];
 
     // --------------------------------------------------------
     // -------------------------LOGIC-------------------------
 
-    const winningOrLosingAction = (position, mess) => {
-        document.querySelector('.popup-content').innerHTML = `<h1>${message[mess]}</h1>`;
+    const winningOrLosingAction = (position, mess, count) => {
+        document.querySelector('.popup-content').innerHTML = `
+            <h1>${message[mess]}</h1>
+            <H2>Очков набрано: ${counter}</H2>
+        `;
+
+        counter = 0;
         clearInterval(intervalStart);
         position = position;
         stop = true;
@@ -41,7 +48,7 @@ const game = ({
                     `;
                 }
                 if (defeat) {
-                    winningOrLosingAction(position, 'defeat');
+                    winningOrLosingAction(position, 'defeat', count);
                     return;
                 }
                 if (finish) {
@@ -63,8 +70,9 @@ const game = ({
         let position = -80;
 
         passed++;
-        if (passed === numberObstaclesFinish) {
-            obstacle.style.background = 'gray';
+        if (passed === finish) {
+            obstacle.style.background = 'rgb(88, 7, 7)';
+            obstacle.style.border = 'black 3px solid';
         }
 
         obstacle.classList.add('game__obstacle');
@@ -81,10 +89,22 @@ const game = ({
 
         passed = 0;
         stop = false;
-        popup.style.display = 'none';
         gameWindow.style.display = 'block';
 
-        intervalStart = setInterval(createObstacleAndStartAnimate, obstacleRefreshRate);   
+        intervalStart = setInterval(createObstacleAndStartAnimate, obstacleRefreshRate);
+    };
+
+    const testCheck = (elems, block) => {
+        let test = [];
+
+        elems.forEach((elem, i) => {
+            if (elem.style.background === 'rgb(255, 255, 255)') { test[i] = elem; }
+        });
+
+        if (test.length) {
+            block.style.display = 'none';
+            startGame();
+        }
     };
 
     // --------------------------------------------------------
@@ -92,44 +112,83 @@ const game = ({
 
     const gameWindow = document.createElement('div'),
           gameBall = document.createElement('div'),
-          popup = document.createElement('div');
+          popup = document.createElement('div'),
+          options = document.createElement('div');
 
     // --------------------------------------------------------
     // -------------------------RENDER-------------------------
 
     popup.classList.add('game__popup');
+    options.classList.add('game__options');
+    gameWindow.classList.add('game__window');
+    gameBall.classList.add('game__ball');
+
     popup.innerHTML = `
         <div class="popup-content"> 
             <h1>${message.greeting}</h1><hr>
             <h3>Q - маленький прыжок</h3>
             <h3>W - средний прыжок</h3>
             <h3>E - высокий прыжок</h3><hr>
-            <h2>Ваша задача преодолеть ${numberObstaclesFinish} препятствий</h2>
+        </div>
+        <div class="btn-options">НАСТРОЙКИ</div>
+    `;
+    options.innerHTML = `
+        <div class="options__content"> 
+            <h1>Настройки</h1><hr>
+            <h3>Количество ограждений до финиша:</h3>
+            <div class="options__wrap">
+                <div class="btn-quantity">${numberObstaclesFinish[0]}</div>
+                <div class="btn-quantity">${numberObstaclesFinish[1]}</div>
+                <div class="btn-quantity">${numberObstaclesFinish[2]}</div>
+                <div class="btn-quantity">${numberObstaclesFinish[3]}</div>
+                <div class="btn-quantity">${numberObstaclesFinish[4]}</div>
+            </div>
+            <hr>
         </div>
         <div class="btn">НАЧАТЬ</div>
     `;
-    document.body.append(popup);
-
-    gameWindow.classList.add('game__window');
     gameWindow.innerHTML = `
         <div class="counter">
             ОЧКИ:
             <p>${counter}</p>
         </div>
     `;
-    document.body.append(gameWindow);
-
-    gameBall.classList.add('game__ball');
     gameBall.innerHTML = `
         <div class="flare"></div>
         <div class="shadow"></div>
     `;
+
+    document.body.append(popup);
+    document.body.append(options);
+    document.body.append(gameWindow);
     gameWindow.append(gameBall);
+    
+    background(gameWindow);
 
     // --------------------------------------------------------
     // -------------------------EVENT-------------------------
 
-    document.querySelector('.btn').addEventListener('click', () => startGame());
+    const btnOtion = document.querySelector('.btn-options'),
+          btnStart = document.querySelector('.btn'),
+          quantities = document.querySelectorAll('.btn-quantity');
+
+    quantities.forEach((quantity, i) => quantity.addEventListener('click', () => {
+        quantities.forEach(quantity => {
+            quantity.style.color = '#fff';
+            quantity.style.background = '#000';
+        });
+        quantity.style.color = '#000';
+        quantity.style.background = '#fff';
+
+        finish = numberObstaclesFinish[i];
+    }));
+    
+    btnOtion.addEventListener('click', e => {
+        popup.style.display = 'none';
+        options.style.display = 'flex';
+    });
+    
+    btnStart.addEventListener('click', () => testCheck(quantities, options));
 
     document.addEventListener('keydown', event => {
         startAnimateBall({event, 
@@ -149,8 +208,12 @@ const game = ({
         });
 
         if (event.keyCode === 13) {
+            if (window.getComputedStyle(options).display === 'flex') {
+                testCheck(quantities, options);
+            }
             if (window.getComputedStyle(popup).display === 'flex') {
-                startGame();
+                popup.style.display = 'none';
+                options.style.display = 'flex';
             }
         }
     });

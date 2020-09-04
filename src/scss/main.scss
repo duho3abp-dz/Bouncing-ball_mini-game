@@ -32,6 +32,7 @@ body {
             height: 100px;
             top: 5px;
             right: 5px;
+            z-index: 10;
 
             & p {
                 font-size: 25px;
@@ -44,10 +45,10 @@ body {
         width: 50px;
         background: #000;
         position: absolute;
-        box-shadow: rgba(0, 0, 0, 0.425) -56px 55px 25px;
         bottom: 0px;
         left: 50%;
         border-radius: 50%;
+        z-index: 15;
 
         &  .flare {
             background: #fff;
@@ -76,6 +77,7 @@ body {
         bottom: 0px;
         border-top-right-radius: 10px;
         border-top-left-radius: 10px;
+        z-index: 20;
     }
     &__popup {
         background: #fff;
@@ -93,6 +95,52 @@ body {
             font-family: 'Comic Sans MS';
             font-size: 18px;
         }
+        & .btn-options {
+            font-family: 'Comic Sans MS';
+            font-size: 25px;
+            background: #000;
+            color: #fff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    }
+    &__options {
+        background: #fff;
+        width: 50%;
+        height: 550px;
+        border-radius: 5px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        overflow: hidden;
+        display: none;
+        // display: flex;
+
+        & .options {
+            &__content {
+                font-family: 'Comic Sans MS';
+                font-size: 18px;
+            }
+            &__wrap {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                text-align: center;
+                & .btn-quantity {
+                    font-size: 25px;
+                    background: #000;
+                    color: #fff;
+                    border-radius: 5px;
+                    border: black 5px solid;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                }
+            }
+        }
+
         & .btn {
             font-family: 'Comic Sans MS';
             font-size: 25px;

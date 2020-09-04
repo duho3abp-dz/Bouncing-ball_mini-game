@@ -7,7 +7,7 @@ const crashTest = (elem, widthObs, heightObs, gameBall) => {
           leftStyleObstacle = roundTheNumber(elem.style.left),
           bottomStyleBall = roundTheNumber(gameBall.style.bottom);
 
-    if (elem.style.background === 'gray' &&
+    if (elem.style.background === 'rgb(88, 7, 7)' &&
         leftStyleBall <= leftStyleObstacle + widthObs &&
         leftStyleBall + 50 >= leftStyleObstacle + widthObs ) {
         return {

@@ -1,0 +1,260 @@
+//-----------------------------one-----------------------------
+.decor_one{
+    width: 100px;
+    height: 450px;
+    background: rgb(204, 203, 203);
+    position: absolute;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: black solid 1px;
+    bottom: -5px;
+    left: -30%;
+
+    animation-name: one-animate;
+    animation-duration: 10s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes one-animate{
+    0%{
+        left: -30%;
+    }
+    100%{
+        left: 130%;
+    }
+}
+//-----------------------------two-----------------------------
+.decor_two{
+    width: 70px;
+    height: 490px;
+    background: rgb(180, 178, 178);
+    position: absolute;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    left: 0%;
+    border: black solid 1px;
+    bottom: -5px;
+
+    animation-name: two-animate;
+    animation-duration: 15s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes two-animate{
+    0%{
+        left: -30%;
+    }
+    100%{
+        left: 130%;
+    }
+}
+//-----------------------------three-----------------------------
+.decor_three{
+    width: 500px;
+    height: 350px;
+    background: rgb(207, 206, 206);
+    position: absolute;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border: black solid 1px;
+    left: 10%;
+    bottom: -5px;
+
+    animation-name: three-animate;
+    animation-duration: 17s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes three-animate{
+    0%{
+        left: -60%;
+    }
+    100%{
+        left: 130%;
+    }
+}
+//-----------------------------four-----------------------------
+.decor_four{
+    width: 200px;
+    height: 495px;
+    background: rgb(201, 199, 199);
+    position: absolute;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border: black solid 1px;
+    left: 10%;
+    bottom: -5px;
+
+    animation-name: four-animate;
+    animation-duration: 16s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes four-animate{
+    0%{
+        left: -30%;
+    }
+    100%{
+        left: 130%;
+    }
+}
+//-----------------------------five-----------------------------
+.decor_five{
+    width: 150px;
+    height: 425px;
+    background: rgb(228, 225, 225);
+    position: absolute;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border: black solid 1px;
+    left: 10%;
+    bottom: -5px;
+
+    animation-name: five-animate;
+    animation-duration: 13s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes five-animate{
+    0%{
+        left: -30%;
+    }
+    100%{
+        left: 130%;
+    }
+}
+//-----------------------------six-----------------------------
+.decor_six{
+    width: 150px;
+    height: 470px;
+    background: rgb(211, 209, 209);
+    position: absolute;
+    border-top-left-radius: 70px;
+    border-top-right-radius: 70px;
+    border: black solid 1px;
+    left: 10%;
+    bottom: -5px;
+
+    animation-name: six-animate;
+    animation-duration: 5s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes six-animate{
+    0%{
+        left: -30%;
+    }
+    100%{
+        left: 130%;
+    }
+}
+//-----------------------------seven-----------------------------
+.decor_seven{
+    width: 400px;
+    height: 200px;
+    background: rgb(243, 241, 241);
+    position: absolute;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border: black solid 1px;
+    left: 10%;
+    bottom: -5px;
+
+    animation-name: seven-animate;
+    animation-duration: 7s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes seven-animate{
+    0%{
+        left: -50%;
+    }
+    100%{
+        left: 130%;
+    }
+}
+//-----------------------------eight-----------------------------
+.decor_eight{
+    width: 250px;
+    height: 470px;
+    background: rgb(223, 222, 222);
+    position: absolute;
+    border-top-left-radius: 90px;
+    border-top-right-radius: 90px;
+    border: black solid 1px;
+    left: 10%;
+    bottom: -5px;
+
+    animation-name: eight-animate;
+    animation-duration: 9s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes eight-animate{
+    0%{
+        left: -50%;
+    }
+    100%{
+        left: 130%;
+    }
+}
+//-----------------------------nine-----------------------------
+.decor_nine{
+    width: 120px;
+    height: 440px;
+    background: rgb(209, 208, 208);
+    position: absolute;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border: black solid 1px;
+    left: 10%;
+    bottom: -5px;
+
+    animation-name: nine-animate;
+    animation-duration: 8s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes nine-animate{
+    0%{
+        left: -50%;
+    }
+    100%{
+        left: 130%;
+    }
+}
+//-----------------------------ten-----------------------------
+.decor_ten{
+    width: 500px;
+    height: 380px;
+    background: rgb(201, 199, 199);
+    position: absolute;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border: black solid 1px;
+    left: 10%;
+    bottom: -5px;
+
+    animation-name: ten-animate;
+    animation-duration: 12s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes ten-animate{
+    0%{
+        left: -60%;
+    }
+    100%{
+        left: 130%;
+    }
+}
