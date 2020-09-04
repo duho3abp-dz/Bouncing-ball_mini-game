@@ -575,7 +575,7 @@ const game = ({
     // --------------------------------------------------------
     // -------------------------EVENT-------------------------
 
-    const btnOtion = document.querySelector('.btn-options'),
+    const btnOption = document.querySelector('.btn-options'),
           btnStart = document.querySelector('.btn'),
           quantities = document.querySelectorAll('.btn-quantity');
 
@@ -590,7 +590,7 @@ const game = ({
         finish = numberObstaclesFinish[i];
     }));
     
-    btnOtion.addEventListener('click', e => {
+    btnOption.addEventListener('click', e => {
         popup.style.display = 'none';
         options.style.display = 'flex';
     });
@@ -598,6 +598,7 @@ const game = ({
     btnStart.addEventListener('click', () => testCheck(quantities, options));
 
     document.addEventListener('keydown', event => {
+        
         Object(_modules_animateBall__WEBPACK_IMPORTED_MODULE_0__["default"])({event, 
             keyCode: 81, 
             element: gameBall,
@@ -613,6 +614,7 @@ const game = ({
             element: gameBall,
             maxHeight: 450
         });
+        
 
         if (event.keyCode === 13) {
             if (window.getComputedStyle(options).display === 'flex') {
@@ -642,63 +644,67 @@ const game = ({
 __webpack_require__.r(__webpack_exports__);
 
 
-let heightBounce = 0;
+let heightBounce = 0,
+    reduction = 0;
 
-const animateBallDown = (ball, speed, maxHeight, deceleration) => {
-    if (deceleration) {
-        heightBounce = heightBounce - deceleration;
-        ball.style.bottom = `${heightBounce}px`;
-    } else {
-        heightBounce = heightBounce - speed;
-        ball.style.bottom = `${heightBounce}px`;
+const speedReduction = ({
+    maxHeight, 
+    up
+}) => {
+    if (heightBounce >= maxHeight - 100 && heightBounce < maxHeight - 90) {
+        reduction = up ? 0 : -1;
+    } else if (heightBounce >= maxHeight - 90 && heightBounce < maxHeight - 80) {
+        reduction = up ? 1 : 0;
+    } else if (heightBounce >= maxHeight - 80 && heightBounce < maxHeight - 70) {
+        reduction = up ? 2 : 1;
+    } else if (heightBounce >= maxHeight - 70 && heightBounce < maxHeight - 60) {
+        reduction = up ? 3 : 2;
+    } else if (heightBounce >= maxHeight - 60 && heightBounce < maxHeight - 50) {
+        reduction = up ? 4 : 3;
+    } else if (heightBounce >= maxHeight - 50 && heightBounce < maxHeight - 40) {
+        reduction = up ? 5 : 4;
+    } else if (heightBounce >= maxHeight - 40 && heightBounce < maxHeight - 30) {
+        reduction = up ? 6 : 5;
+    } else if (heightBounce >= maxHeight - 30 && heightBounce < maxHeight - 20) {
+        reduction = up ? 7 : 6;
+    } else if (heightBounce >= maxHeight - 20) {
+        reduction = up ? 8 : 7;
     }
+};
 
-    if (heightBounce >= maxHeight - 150 && heightBounce < maxHeight - 30) {
-        const deceleration = 5;
-        requestAnimationFrame(() => animateBallDown(ball, speed, maxHeight, deceleration));
-    }
-    if (heightBounce >= maxHeight - 30 && heightBounce < maxHeight) {
-        const deceleration = 2;
-        requestAnimationFrame(() => animateBallDown(ball, speed, maxHeight, deceleration));
-    }
+const animateBallDown = ({
+    element, 
+    speed, 
+    maxHeight
+}) => {
+    speedReduction({maxHeight});
+    
+    heightBounce = heightBounce - speed + reduction;
+    element.style.bottom = `${heightBounce}px`;
+
     if (heightBounce > 0) {
-        requestAnimationFrame(() => animateBallDown(ball, speed, maxHeight));
+        requestAnimationFrame(() => animateBallDown({element, speed, maxHeight}));    
     }
     if (heightBounce <= 0) {
-        heightBounce = 0;
+        element.style.bottom = '0px';
     }
 };
 
 const animateBallUp = ({
     element, 
-    startSpeed, 
-    deceleration, 
-    maxHeight, 
-    descent
+    speed, 
+    maxHeight
 }) => {
-    if (deceleration) {
-        heightBounce = heightBounce + deceleration;
-        element.style.bottom = `${heightBounce}px`;    
-    } else {
-        heightBounce = heightBounce + startSpeed;
-        element.style.bottom = `${heightBounce}px`;
-    }
+    speedReduction({maxHeight, up: true});
+    
+    heightBounce = heightBounce + speed - reduction;
+    element.style.bottom = `${heightBounce}px`;
 
-    if (heightBounce < maxHeight - 150) {
-        requestAnimationFrame(() => animateBallUp({element, startSpeed, descent, maxHeight}));
-    }
-    if (heightBounce >= maxHeight - 150 && heightBounce < maxHeight - 30) {
-        requestAnimationFrame(() => animateBallUp({element, startSpeed, descent, maxHeight,
-            deceleration: 5
-        }));
-    }
-    if (heightBounce >= maxHeight - 30 && heightBounce < maxHeight) {
-        requestAnimationFrame(() => animateBallUp({element, startSpeed, descent, maxHeight,
-            deceleration: 2
-        }));
+    if (heightBounce < maxHeight) {
+        requestAnimationFrame(() => animateBallUp({element, speed, maxHeight}));
     }
     if (heightBounce >= maxHeight) {
-        requestAnimationFrame(() => animateBallDown(element, startSpeed));
+        requestAnimationFrame(() => animateBallDown({element, speed, maxHeight}));
     }
 };
 
@@ -706,15 +712,16 @@ const startAnimateBall = ({
     event, 
     keyCode, 
     element, 
-    startSpeed = 10, 
+    speed = 10, 
     maxHeight, 
     descent = 5
 }) => {
     if (event.keyCode === keyCode) {
-        if (element.style.bottom === '0px' || element.style.bottom === '') {
+        const bottom = element.style.bottom.replace(/px/, '');
+        if (element.style.bottom === '0px' || element.style.bottom === '' || +bottom <= 0) {
             requestAnimationFrame(() => animateBallUp({
                 element,
-                startSpeed, 
+                speed, 
                 maxHeight,
                 descent
             }));     
@@ -739,7 +746,10 @@ __webpack_require__.r(__webpack_exports__);
 
 const background = (bg) => {
 
-    const decorOne = document.createElement('div'),
+    const startDecorOne = document.createElement('div'),
+          startDecorTwo = document.createElement('div'),
+          startDecorThree = document.createElement('div'),
+          decorOne = document.createElement('div'),
           decorTwo = document.createElement('div'),
           decorThree = document.createElement('div'),
           decorFour = document.createElement('div'),
@@ -750,6 +760,10 @@ const background = (bg) => {
           decorNine = document.createElement('div'),
           decorTen = document.createElement('div');
 
+    startDecorOne.classList.add('start-decor_one');
+    startDecorTwo.classList.add('start-decor_two');
+    startDecorThree.classList.add('start-decor_three');
+
     decorOne.classList.add('decor_one');
     decorTwo.classList.add('decor_two');
     decorThree.classList.add('decor_three');
@@ -757,8 +771,13 @@ const background = (bg) => {
     decorFive.classList.add('decor_five');
     decorSix.classList.add('decor_six');
     decorSeven.classList.add('decor_seven');
+    decorEight.classList.add('decor_eight');
     decorNine.classList.add('decor_nine');
     decorTen.classList.add('decor_ten');
+
+    bg.append(startDecorOne);
+    bg.append(startDecorTwo);
+    bg.append(startDecorThree);
 
     bg.append(decorOne);
     bg.append(decorTwo);
@@ -766,6 +785,7 @@ const background = (bg) => {
     bg.append(decorFour);
     bg.append(decorFive);
     bg.append(decorSix);
+    bg.append(decorSeven);
     bg.append(decorEight);
     bg.append(decorNine);
     bg.append(decorTen);
@@ -845,7 +865,7 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', () => {
 
     Object(_js_main__WEBPACK_IMPORTED_MODULE_2__["default"])({
-        numberObstaclesFinish: [5, 10, 15, 20, 25],
+        numberObstaclesFinish: [10, 20, 30, 40, 50],
         obstacleRefreshRate: 2000,
         message: {
             greeting: 'Мини-игра "Прыгающий мяч"',

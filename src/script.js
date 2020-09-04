@@ -6,7 +6,7 @@ import game from './js/main';
 window.addEventListener('DOMContentLoaded', () => {
 
     game({
-        numberObstaclesFinish: [5, 10, 15, 20, 25],
+        numberObstaclesFinish: [10, 20, 30, 40, 50],
         obstacleRefreshRate: 2000,
         message: {
             greeting: 'Мини-игра "Прыгающий мяч"',

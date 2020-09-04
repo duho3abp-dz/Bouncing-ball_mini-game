@@ -1,62 +1,66 @@
 'use strict';
 
-let heightBounce = 0;
+let heightBounce = 0,
+    reduction = 0;
 
-const animateBallDown = (ball, speed, maxHeight, deceleration) => {
-    if (deceleration) {
-        heightBounce = heightBounce - deceleration;
-        ball.style.bottom = `${heightBounce}px`;
-    } else {
-        heightBounce = heightBounce - speed;
-        ball.style.bottom = `${heightBounce}px`;
+const speedReduction = ({
+    maxHeight, 
+    up
+}) => {
+    if (heightBounce >= maxHeight - 100 && heightBounce < maxHeight - 90) {
+        reduction = up ? 0 : -1;
+    } else if (heightBounce >= maxHeight - 90 && heightBounce < maxHeight - 80) {
+        reduction = up ? 1 : 0;
+    } else if (heightBounce >= maxHeight - 80 && heightBounce < maxHeight - 70) {
+        reduction = up ? 2 : 1;
+    } else if (heightBounce >= maxHeight - 70 && heightBounce < maxHeight - 60) {
+        reduction = up ? 3 : 2;
+    } else if (heightBounce >= maxHeight - 60 && heightBounce < maxHeight - 50) {
+        reduction = up ? 4 : 3;
+    } else if (heightBounce >= maxHeight - 50 && heightBounce < maxHeight - 40) {
+        reduction = up ? 5 : 4;
+    } else if (heightBounce >= maxHeight - 40 && heightBounce < maxHeight - 30) {
+        reduction = up ? 6 : 5;
+    } else if (heightBounce >= maxHeight - 30 && heightBounce < maxHeight - 20) {
+        reduction = up ? 7 : 6;
+    } else if (heightBounce >= maxHeight - 20) {
+        reduction = up ? 8 : 7;
     }
+};
 
-    if (heightBounce >= maxHeight - 150 && heightBounce < maxHeight - 30) {
-        const deceleration = 5;
-        requestAnimationFrame(() => animateBallDown(ball, speed, maxHeight, deceleration));
-    }
-    if (heightBounce >= maxHeight - 30 && heightBounce < maxHeight) {
-        const deceleration = 2;
-        requestAnimationFrame(() => animateBallDown(ball, speed, maxHeight, deceleration));
-    }
+const animateBallDown = ({
+    element, 
+    speed, 
+    maxHeight
+}) => {
+    speedReduction({maxHeight});
+    
+    heightBounce = heightBounce - speed + reduction;
+    element.style.bottom = `${heightBounce}px`;
+
     if (heightBounce > 0) {
-        requestAnimationFrame(() => animateBallDown(ball, speed, maxHeight));
+        requestAnimationFrame(() => animateBallDown({element, speed, maxHeight}));    
     }
     if (heightBounce <= 0) {
-        heightBounce = 0;
+        element.style.bottom = '0px';
     }
 };
 
 const animateBallUp = ({
     element, 
-    startSpeed, 
-    deceleration, 
-    maxHeight, 
-    descent
+    speed, 
+    maxHeight
 }) => {
-    if (deceleration) {
-        heightBounce = heightBounce + deceleration;
-        element.style.bottom = `${heightBounce}px`;    
-    } else {
-        heightBounce = heightBounce + startSpeed;
-        element.style.bottom = `${heightBounce}px`;
-    }
+    speedReduction({maxHeight, up: true});
+    
+    heightBounce = heightBounce + speed - reduction;
+    element.style.bottom = `${heightBounce}px`;
 
-    if (heightBounce < maxHeight - 150) {
-        requestAnimationFrame(() => animateBallUp({element, startSpeed, descent, maxHeight}));
-    }
-    if (heightBounce >= maxHeight - 150 && heightBounce < maxHeight - 30) {
-        requestAnimationFrame(() => animateBallUp({element, startSpeed, descent, maxHeight,
-            deceleration: 5
-        }));
-    }
-    if (heightBounce >= maxHeight - 30 && heightBounce < maxHeight) {
-        requestAnimationFrame(() => animateBallUp({element, startSpeed, descent, maxHeight,
-            deceleration: 2
-        }));
+    if (heightBounce < maxHeight) {
+        requestAnimationFrame(() => animateBallUp({element, speed, maxHeight}));
     }
     if (heightBounce >= maxHeight) {
-        requestAnimationFrame(() => animateBallDown(element, startSpeed));
+        requestAnimationFrame(() => animateBallDown({element, speed, maxHeight}));
     }
 };
 
@@ -64,15 +68,16 @@ const startAnimateBall = ({
     event, 
     keyCode, 
     element, 
-    startSpeed = 10, 
+    speed = 10, 
     maxHeight, 
     descent = 5
 }) => {
     if (event.keyCode === keyCode) {
-        if (element.style.bottom === '0px' || element.style.bottom === '') {
+        const bottom = element.style.bottom.replace(/px/, '');
+        if (element.style.bottom === '0px' || element.style.bottom === '' || +bottom <= 0) {
             requestAnimationFrame(() => animateBallUp({
                 element,
-                startSpeed, 
+                speed, 
                 maxHeight,
                 descent
             }));     

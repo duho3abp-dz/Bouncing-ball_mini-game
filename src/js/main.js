@@ -173,7 +173,7 @@ const game = ({
     // --------------------------------------------------------
     // -------------------------EVENT-------------------------
 
-    const btnOtion = document.querySelector('.btn-options'),
+    const btnOption = document.querySelector('.btn-options'),
           btnStart = document.querySelector('.btn'),
           quantities = document.querySelectorAll('.btn-quantity');
 
@@ -188,7 +188,7 @@ const game = ({
         finish = numberObstaclesFinish[i];
     }));
     
-    btnOtion.addEventListener('click', e => {
+    btnOption.addEventListener('click', e => {
         popup.style.display = 'none';
         options.style.display = 'flex';
     });
@@ -196,6 +196,7 @@ const game = ({
     btnStart.addEventListener('click', () => testCheck(quantities, options));
 
     document.addEventListener('keydown', event => {
+        
         startAnimateBall({event, 
             keyCode: 81, 
             element: gameBall,
@@ -211,6 +212,7 @@ const game = ({
             element: gameBall,
             maxHeight: 450
         });
+        
 
         if (event.keyCode === 13) {
             if (window.getComputedStyle(options).display === 'flex') {

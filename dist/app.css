@@ -130,6 +130,63 @@ body {
     padding: 5px 10px;
     cursor: pointer; }
 
+.start-decor_one {
+  width: 200px;
+  height: 350px;
+  background: #dddbdb;
+  position: absolute;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border: black solid 1px;
+  bottom: -5px;
+  animation-name: start-one-animate;
+  animation-duration: 25s;
+  animation-fill-mode: forwards; }
+
+@keyframes start-one-animate {
+  0% {
+    left: 5%; }
+  100% {
+    left: 130%; } }
+
+.start-decor_two {
+  width: 400px;
+  height: 300px;
+  background: #adacac;
+  position: absolute;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border: black solid 1px;
+  bottom: -5px;
+  animation-name: start-two-animate;
+  animation-duration: 20s;
+  animation-fill-mode: forwards; }
+
+@keyframes start-two-animate {
+  0% {
+    left: 40%; }
+  100% {
+    left: 130%; } }
+
+.start-decor_three {
+  width: 100px;
+  height: 480px;
+  background: #f1f0f0;
+  position: absolute;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border: black solid 1px;
+  bottom: -5px;
+  animation-name: start-three-animate;
+  animation-duration: 25s;
+  animation-fill-mode: forwards; }
+
+@keyframes start-three-animate {
+  0% {
+    left: 30%; }
+  100% {
+    left: 130%; } }
+
 .decor_one {
   width: 100px;
   height: 450px;
@@ -139,15 +196,14 @@ body {
   border-top-right-radius: 5px;
   border: black solid 1px;
   bottom: -5px;
-  left: -30%;
   animation-name: one-animate;
-  animation-duration: 10s;
+  animation-duration: 20s;
   animation-timing-function: ease-in;
   animation-iteration-count: infinite; }
 
 @keyframes one-animate {
   0% {
-    left: -30%; }
+    left: -20%; }
   100% {
     left: 130%; } }
 
@@ -158,11 +214,10 @@ body {
   position: absolute;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  left: 0%;
   border: black solid 1px;
   bottom: -5px;
   animation-name: two-animate;
-  animation-duration: 15s;
+  animation-duration: 23s;
   animation-timing-function: ease-in;
   animation-iteration-count: infinite; }
 
@@ -180,16 +235,15 @@ body {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border: black solid 1px;
-  left: 10%;
   bottom: -5px;
   animation-name: three-animate;
-  animation-duration: 17s;
+  animation-duration: 18s;
   animation-timing-function: ease-in;
   animation-iteration-count: infinite; }
 
 @keyframes three-animate {
   0% {
-    left: -60%; }
+    left: -50%; }
   100% {
     left: 130%; } }
 
@@ -198,40 +252,38 @@ body {
   height: 495px;
   background: #c9c7c7;
   position: absolute;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
   border: black solid 1px;
-  left: 10%;
   bottom: -5px;
   animation-name: four-animate;
-  animation-duration: 16s;
+  animation-duration: 19s;
   animation-timing-function: ease-in;
   animation-iteration-count: infinite; }
 
 @keyframes four-animate {
   0% {
-    left: -30%; }
+    left: -50%; }
   100% {
     left: 130%; } }
 
 .decor_five {
   width: 150px;
   height: 425px;
-  background: #e4e1e1;
+  background: #f1f0f0;
   position: absolute;
-  border-top-left-radius: 50px;
-  border-top-right-radius: 50px;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
   border: black solid 1px;
-  left: 10%;
   bottom: -5px;
   animation-name: five-animate;
-  animation-duration: 13s;
+  animation-duration: 20s;
   animation-timing-function: ease-in;
   animation-iteration-count: infinite; }
 
 @keyframes five-animate {
   0% {
-    left: -30%; }
+    left: -65%; }
   100% {
     left: 130%; } }
 
@@ -240,19 +292,18 @@ body {
   height: 470px;
   background: #d3d1d1;
   position: absolute;
-  border-top-left-radius: 70px;
-  border-top-right-radius: 70px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   border: black solid 1px;
-  left: 10%;
   bottom: -5px;
   animation-name: six-animate;
-  animation-duration: 5s;
+  animation-duration: 21s;
   animation-timing-function: ease-in;
   animation-iteration-count: infinite; }
 
 @keyframes six-animate {
   0% {
-    left: -30%; }
+    left: -80%; }
   100% {
     left: 130%; } }
 
@@ -264,37 +315,35 @@ body {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   border: black solid 1px;
-  left: 10%;
   bottom: -5px;
   animation-name: seven-animate;
-  animation-duration: 7s;
+  animation-duration: 30s;
   animation-timing-function: ease-in;
   animation-iteration-count: infinite; }
 
 @keyframes seven-animate {
   0% {
-    left: -50%; }
+    left: -150%; }
   100% {
     left: 130%; } }
 
 .decor_eight {
   width: 250px;
   height: 470px;
-  background: #dfdede;
+  background: #f6f5f5;
   position: absolute;
-  border-top-left-radius: 90px;
-  border-top-right-radius: 90px;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
   border: black solid 1px;
-  left: 10%;
   bottom: -5px;
   animation-name: eight-animate;
-  animation-duration: 9s;
+  animation-duration: 23s;
   animation-timing-function: ease-in;
   animation-iteration-count: infinite; }
 
 @keyframes eight-animate {
   0% {
-    left: -50%; }
+    left: -100%; }
   100% {
     left: 130%; } }
 
@@ -306,16 +355,15 @@ body {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border: black solid 1px;
-  left: 10%;
   bottom: -5px;
   animation-name: nine-animate;
-  animation-duration: 8s;
+  animation-duration: 24s;
   animation-timing-function: ease-in;
   animation-iteration-count: infinite; }
 
 @keyframes nine-animate {
   0% {
-    left: -50%; }
+    left: -110%; }
   100% {
     left: 130%; } }
 
@@ -324,19 +372,18 @@ body {
   height: 380px;
   background: #c9c7c7;
   position: absolute;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
   border: black solid 1px;
-  left: 10%;
   bottom: -5px;
   animation-name: ten-animate;
-  animation-duration: 12s;
+  animation-duration: 25s;
   animation-timing-function: ease-in;
   animation-iteration-count: infinite; }
 
 @keyframes ten-animate {
   0% {
-    left: -60%; }
+    left: -190%; }
   100% {
     left: 130%; } }
 
