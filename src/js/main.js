@@ -22,7 +22,7 @@ const game = ({
     // --------------------------------------------------------
     // -------------------------LOGIC-------------------------
 
-    const winningOrLosingAction = (position, mess, count) => {
+    const winningOrLosingAction = (position, mess) => {
         document.querySelector('.popup-content').innerHTML = `
             <h1>${message[mess]}</h1>
             <H2>Очков набрано: ${counter}</H2>
@@ -34,6 +34,11 @@ const game = ({
         stop = true;
         gameWindow.style.display = 'none';
         popup.style.display = 'flex';
+
+        document.querySelector('.counter').innerHTML = `
+            ОЧКИ:
+            <p>${counter}</p>
+        `;
     };
 
     const animateObstacle = (elem, position, widthObs, heightObs) => {
@@ -48,7 +53,7 @@ const game = ({
                     `;
                 }
                 if (defeat) {
-                    winningOrLosingAction(position, 'defeat', count);
+                    winningOrLosingAction(position, 'defeat');
                     return;
                 }
                 if (finish) {
