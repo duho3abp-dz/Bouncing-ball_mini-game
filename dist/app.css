@@ -84,16 +84,8 @@ body {
   .game__popup .popup-content {
     font-family: 'Comic Sans MS';
     font-size: 18px; }
-  .game__popup .btn-options {
-    font-family: 'Comic Sans MS';
-    font-size: 25px;
-    background: #000;
-    color: #fff;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer; }
 
-.game__options {
+.game__menu {
   background: #fff;
   width: 50%;
   height: 550px;
@@ -104,16 +96,16 @@ body {
   text-align: center;
   overflow: hidden;
   display: none; }
-  .game__options .options__content {
+  .game__menu .options__content {
     font-family: 'Comic Sans MS';
     font-size: 18px; }
-  .game__options .options__wrap {
+  .game__menu .options__wrap {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
     text-align: center; }
-    .game__options .options__wrap .btn-quantity {
+    .game__menu .options__wrap .btn-quantity {
       font-size: 25px;
       background: #000;
       color: #fff;
@@ -121,14 +113,19 @@ body {
       border: black 5px solid;
       padding: 5px 10px;
       cursor: pointer; }
-  .game__options .btn {
-    font-family: 'Comic Sans MS';
-    font-size: 25px;
-    background: #000;
-    color: #fff;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer; }
+
+.btn {
+  font-family: 'Comic Sans MS';
+  font-size: 25px;
+  background: #000;
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  cursor: pointer; }
+
+.back {
+  font-size: 16px; }
 
 .start-decor_one {
   width: 200px;

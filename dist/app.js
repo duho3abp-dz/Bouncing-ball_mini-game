@@ -400,6 +400,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_animateBall__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/animateBall */ "./src/js/modules/animateBall.js");
 /* harmony import */ var _modules_crashTest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/crashTest */ "./src/js/modules/crashTest.js");
 /* harmony import */ var _modules_backgroundAnimate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/backgroundAnimate */ "./src/js/modules/backgroundAnimate.js");
+/* harmony import */ var _modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/hideShowModal */ "./src/js/modules/hideShowModal.js");
+/* harmony import */ var _modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/scoreRecord */ "./src/js/modules/scoreRecord.js");
+/* harmony import */ var _modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/animationButtons */ "./src/js/modules/animationButtons.js");
+
+
+
 
 
 
@@ -409,6 +415,7 @@ __webpack_require__.r(__webpack_exports__);
 const game = ({
     numberObstaclesFinish,
     obstacleRefreshRate,
+    jumpSetting,
     message
 }) => {
 
@@ -416,10 +423,10 @@ const game = ({
     // -------------------------STATE-------------------------
 
     let intervalStart,
+        finish,
         passed = 0,
         stop = false,
-        counter = 0,
-        finish = numberObstaclesFinish[0];
+        counter = 0;
 
     // --------------------------------------------------------
     // -------------------------LOGIC-------------------------
@@ -427,9 +434,11 @@ const game = ({
     const winningOrLosingAction = (position, mess) => {
         document.querySelector('.popup-content').innerHTML = `
             <h1>${message[mess]}</h1>
-            <H2>Очков набрано: ${counter}</H2>
+            <H2>Очков набрано: ${counter}</H2><hr>
+            <h2>РЕКОРД ПО ОЧКАМ: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])(counter)}</h2><hr>
         `;
 
+        Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["setScoreRecord"])(counter);
         counter = 0;
         clearInterval(intervalStart);
         position = position;
@@ -448,6 +457,7 @@ const game = ({
             const obj = Object(_modules_crashTest__WEBPACK_IMPORTED_MODULE_1__["default"])(elem, widthObs, heightObs, gameBall);
             if (obj) {
                 const {finish, defeat, count} = obj;
+
                 if (count) {
                     document.querySelector('.counter').innerHTML = `
                         ОЧКИ:
@@ -520,13 +530,13 @@ const game = ({
     const gameWindow = document.createElement('div'),
           gameBall = document.createElement('div'),
           popup = document.createElement('div'),
-          options = document.createElement('div');
+          barriers = document.createElement('div');
 
     // --------------------------------------------------------
     // -------------------------RENDER-------------------------
 
     popup.classList.add('game__popup');
-    options.classList.add('game__options');
+    barriers.classList.add('game__menu');
     gameWindow.classList.add('game__window');
     gameBall.classList.add('game__ball');
 
@@ -536,10 +546,12 @@ const game = ({
             <h3>Q - маленький прыжок</h3>
             <h3>W - средний прыжок</h3>
             <h3>E - высокий прыжок</h3><hr>
+            <h2>РЕКОРД ПО ОЧКАМ: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])()}</h2><hr>
         </div>
-        <div class="btn-options">НАСТРОЙКИ</div>
+        <div class="btn barriers">БАРЬЕРЫ</div>
+        <div class="btn point">НА ОЧКИ</div>
     `;
-    options.innerHTML = `
+    barriers.innerHTML = `
         <div class="options__content"> 
             <h1>Настройки</h1><hr>
             <h3>Количество ограждений до финиша:</h3>
@@ -552,7 +564,8 @@ const game = ({
             </div>
             <hr>
         </div>
-        <div class="btn">НАЧАТЬ</div>
+        <div class="btn start">НАЧАТЬ</div>
+        <div class="btn back">НАЗАД</div>
     `;
     gameWindow.innerHTML = `
         <div class="counter">
@@ -566,7 +579,7 @@ const game = ({
     `;
 
     document.body.append(popup);
-    document.body.append(options);
+    document.body.append(barriers);
     document.body.append(gameWindow);
     gameWindow.append(gameBall);
     
@@ -575,57 +588,60 @@ const game = ({
     // --------------------------------------------------------
     // -------------------------EVENT-------------------------
 
-    const btnOption = document.querySelector('.btn-options'),
-          btnStart = document.querySelector('.btn'),
+    const btnBarriers = document.querySelector('.barriers'),
+          btnPoint = document.querySelector('.point'),
+          btnStart = document.querySelector('.start'),
+          btnBack = document.querySelector('.back'),
           quantities = document.querySelectorAll('.btn-quantity');
 
     quantities.forEach((quantity, i) => quantity.addEventListener('click', () => {
-        quantities.forEach(quantity => {
-            quantity.style.color = '#fff';
-            quantity.style.background = '#000';
-        });
-        quantity.style.color = '#000';
-        quantity.style.background = '#fff';
+        Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__["clearBtnsStyle"])({btns: quantities});
+        Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__["selectButton"])({btn: quantity});
 
         finish = numberObstaclesFinish[i];
     }));
-    
-    btnOption.addEventListener('click', e => {
+
+    btnStart.addEventListener('click', () => testCheck(quantities, barriers));
+    btnPoint.addEventListener('click', () => {
+        Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__["clearBtnsStyle"])({btns: quantities});
+        finish = '';
         popup.style.display = 'none';
-        options.style.display = 'flex';
+        startGame();
     });
-    
-    btnStart.addEventListener('click', () => testCheck(quantities, options));
 
     document.addEventListener('keydown', event => {
-        
-        Object(_modules_animateBall__WEBPACK_IMPORTED_MODULE_0__["default"])({event, 
-            keyCode: 81, 
-            element: gameBall,
-            maxHeight: 200
+        jumpSetting.forEach(obj => {
+            const {keyCode, maxHeight} = obj;
+
+            Object(_modules_animateBall__WEBPACK_IMPORTED_MODULE_0__["default"])({
+                event, 
+                keyCode, 
+                maxHeight,
+                element: gameBall
+            }); 
         });
-        Object(_modules_animateBall__WEBPACK_IMPORTED_MODULE_0__["default"])({event, 
-            keyCode: 87, 
-            element: gameBall,
-            maxHeight: 300
-        });
-        Object(_modules_animateBall__WEBPACK_IMPORTED_MODULE_0__["default"])({event, 
-            keyCode: 69, 
-            element: gameBall,
-            maxHeight: 450
-        });
-        
 
         if (event.keyCode === 13) {
-            if (window.getComputedStyle(options).display === 'flex') {
-                testCheck(quantities, options);
+            if (window.getComputedStyle(barriers).display === 'flex') {
+                testCheck(quantities, barriers);
             }
-            if (window.getComputedStyle(popup).display === 'flex') {
-                popup.style.display = 'none';
-                options.style.display = 'flex';
+            if (window.getComputedStyle(popup).display === 'flex') { 
+                Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
+                    popapShow: barriers, 
+                    popapHide: popup,
+                });
             }
         }
     });
+
+    btnBarriers.addEventListener('click', () => Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
+        popapShow: barriers, 
+        popapHide: popup,
+    }));
+    btnBack.addEventListener('click', () => Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
+        popapShow: popup, 
+        popapHide: barriers,
+    }));
 
 };
 
@@ -730,6 +746,39 @@ const startAnimateBall = ({
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (startAnimateBall);
+
+/***/ }),
+
+/***/ "./src/js/modules/animationButtons.js":
+/*!********************************************!*\
+  !*** ./src/js/modules/animationButtons.js ***!
+  \********************************************/
+/*! exports provided: clearBtnsStyle, selectButton */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearBtnsStyle", function() { return clearBtnsStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectButton", function() { return selectButton; });
+
+
+const clearBtnsStyle = ({
+    btns, 
+    colorBg = '#000', 
+    colorText = '#fff'
+}) => btns.forEach(btn => {
+    btn.style.color = colorText;
+    btn.style.background = colorBg;
+});
+
+const selectButton = ({
+    btn, 
+    colorBg = '#fff', 
+    colorText = '#000'
+}) => {
+    btn.style.color = colorText;
+    btn.style.background = colorBg;
+};
 
 /***/ }),
 
@@ -847,6 +896,62 @@ const crashTest = (elem, widthObs, heightObs, gameBall) => {
 
 /***/ }),
 
+/***/ "./src/js/modules/hideShowModal.js":
+/*!*****************************************!*\
+  !*** ./src/js/modules/hideShowModal.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+
+const hideShowModal = ({
+    popapShow, 
+    popapHide,
+    showDisplay = 'flex', 
+    hideDisplay = 'none'
+}) => {
+    popapShow.style.display = showDisplay;
+    popapHide.style.display = hideDisplay;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (hideShowModal);
+
+/***/ }),
+
+/***/ "./src/js/modules/scoreRecord.js":
+/*!***************************************!*\
+  !*** ./src/js/modules/scoreRecord.js ***!
+  \***************************************/
+/*! exports provided: getScoreRecord, setScoreRecord */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getScoreRecord", function() { return getScoreRecord; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setScoreRecord", function() { return setScoreRecord; });
+
+
+const getScoreRecord = (counter) => {
+    const getScore = localStorage.getItem('score'),
+          score = !getScore ?  0 : getScore ,
+          record = counter > score ? counter : score;
+
+    return record;
+};
+
+const setScoreRecord = (score) => {
+    const oldScore = localStorage.getItem('score');
+
+    if (score > oldScore) {
+        localStorage.setItem('score', score);
+    }
+};
+
+/***/ }),
+
 /***/ "./src/script.js":
 /*!***********************!*\
   !*** ./src/script.js ***!
@@ -869,8 +974,13 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', () => {
 
     Object(_js_main__WEBPACK_IMPORTED_MODULE_2__["default"])({
-        numberObstaclesFinish: [10, 20, 30, 40, 50],
+        numberObstaclesFinish: [5, 20, 30, 40, 50],
         obstacleRefreshRate: 2000,
+        jumpSetting: [
+            {keyCode: 81, maxHeight: 200},
+            {keyCode: 87, maxHeight: 300},
+            {keyCode: 69, maxHeight: 450}
+        ],
         message: {
             greeting: 'Мини-игра "Прыгающий мяч"',
             victory: 'Победа!',

@@ -3,10 +3,14 @@
 import startAnimateBall from './modules/animateBall';
 import crashTest from './modules/crashTest';
 import background from './modules/backgroundAnimate';
+import hideShowModal from './modules/hideShowModal';
+import {getScoreRecord, setScoreRecord} from './modules/scoreRecord';
+import {clearBtnsStyle, selectButton} from './modules/animationButtons';
 
 const game = ({
     numberObstaclesFinish,
     obstacleRefreshRate,
+    jumpSetting,
     message
 }) => {
 
@@ -14,10 +18,10 @@ const game = ({
     // -------------------------STATE-------------------------
 
     let intervalStart,
+        finish,
         passed = 0,
         stop = false,
-        counter = 0,
-        finish = numberObstaclesFinish[0];
+        counter = 0;
 
     // --------------------------------------------------------
     // -------------------------LOGIC-------------------------
@@ -25,9 +29,11 @@ const game = ({
     const winningOrLosingAction = (position, mess) => {
         document.querySelector('.popup-content').innerHTML = `
             <h1>${message[mess]}</h1>
-            <H2>Очков набрано: ${counter}</H2>
+            <H2>Очков набрано: ${counter}</H2><hr>
+            <h2>РЕКОРД ПО ОЧКАМ: ${getScoreRecord(counter)}</h2><hr>
         `;
 
+        setScoreRecord(counter);
         counter = 0;
         clearInterval(intervalStart);
         position = position;
@@ -46,6 +52,7 @@ const game = ({
             const obj = crashTest(elem, widthObs, heightObs, gameBall);
             if (obj) {
                 const {finish, defeat, count} = obj;
+
                 if (count) {
                     document.querySelector('.counter').innerHTML = `
                         ОЧКИ:
@@ -118,13 +125,13 @@ const game = ({
     const gameWindow = document.createElement('div'),
           gameBall = document.createElement('div'),
           popup = document.createElement('div'),
-          options = document.createElement('div');
+          barriers = document.createElement('div');
 
     // --------------------------------------------------------
     // -------------------------RENDER-------------------------
 
     popup.classList.add('game__popup');
-    options.classList.add('game__options');
+    barriers.classList.add('game__menu');
     gameWindow.classList.add('game__window');
     gameBall.classList.add('game__ball');
 
@@ -134,10 +141,12 @@ const game = ({
             <h3>Q - маленький прыжок</h3>
             <h3>W - средний прыжок</h3>
             <h3>E - высокий прыжок</h3><hr>
+            <h2>РЕКОРД ПО ОЧКАМ: ${getScoreRecord()}</h2><hr>
         </div>
-        <div class="btn-options">НАСТРОЙКИ</div>
+        <div class="btn barriers">БАРЬЕРЫ</div>
+        <div class="btn point">НА ОЧКИ</div>
     `;
-    options.innerHTML = `
+    barriers.innerHTML = `
         <div class="options__content"> 
             <h1>Настройки</h1><hr>
             <h3>Количество ограждений до финиша:</h3>
@@ -150,7 +159,8 @@ const game = ({
             </div>
             <hr>
         </div>
-        <div class="btn">НАЧАТЬ</div>
+        <div class="btn start">НАЧАТЬ</div>
+        <div class="btn back">НАЗАД</div>
     `;
     gameWindow.innerHTML = `
         <div class="counter">
@@ -164,7 +174,7 @@ const game = ({
     `;
 
     document.body.append(popup);
-    document.body.append(options);
+    document.body.append(barriers);
     document.body.append(gameWindow);
     gameWindow.append(gameBall);
     
@@ -173,57 +183,60 @@ const game = ({
     // --------------------------------------------------------
     // -------------------------EVENT-------------------------
 
-    const btnOption = document.querySelector('.btn-options'),
-          btnStart = document.querySelector('.btn'),
+    const btnBarriers = document.querySelector('.barriers'),
+          btnPoint = document.querySelector('.point'),
+          btnStart = document.querySelector('.start'),
+          btnBack = document.querySelector('.back'),
           quantities = document.querySelectorAll('.btn-quantity');
 
     quantities.forEach((quantity, i) => quantity.addEventListener('click', () => {
-        quantities.forEach(quantity => {
-            quantity.style.color = '#fff';
-            quantity.style.background = '#000';
-        });
-        quantity.style.color = '#000';
-        quantity.style.background = '#fff';
+        clearBtnsStyle({btns: quantities});
+        selectButton({btn: quantity});
 
         finish = numberObstaclesFinish[i];
     }));
-    
-    btnOption.addEventListener('click', e => {
+
+    btnStart.addEventListener('click', () => testCheck(quantities, barriers));
+    btnPoint.addEventListener('click', () => {
+        clearBtnsStyle({btns: quantities});
+        finish = '';
         popup.style.display = 'none';
-        options.style.display = 'flex';
+        startGame();
     });
-    
-    btnStart.addEventListener('click', () => testCheck(quantities, options));
 
     document.addEventListener('keydown', event => {
-        
-        startAnimateBall({event, 
-            keyCode: 81, 
-            element: gameBall,
-            maxHeight: 200
+        jumpSetting.forEach(obj => {
+            const {keyCode, maxHeight} = obj;
+
+            startAnimateBall({
+                event, 
+                keyCode, 
+                maxHeight,
+                element: gameBall
+            }); 
         });
-        startAnimateBall({event, 
-            keyCode: 87, 
-            element: gameBall,
-            maxHeight: 300
-        });
-        startAnimateBall({event, 
-            keyCode: 69, 
-            element: gameBall,
-            maxHeight: 450
-        });
-        
 
         if (event.keyCode === 13) {
-            if (window.getComputedStyle(options).display === 'flex') {
-                testCheck(quantities, options);
+            if (window.getComputedStyle(barriers).display === 'flex') {
+                testCheck(quantities, barriers);
             }
-            if (window.getComputedStyle(popup).display === 'flex') {
-                popup.style.display = 'none';
-                options.style.display = 'flex';
+            if (window.getComputedStyle(popup).display === 'flex') { 
+                hideShowModal({
+                    popapShow: barriers, 
+                    popapHide: popup,
+                });
             }
         }
     });
+
+    btnBarriers.addEventListener('click', () => hideShowModal({
+        popapShow: barriers, 
+        popapHide: popup,
+    }));
+    btnBack.addEventListener('click', () => hideShowModal({
+        popapShow: popup, 
+        popapHide: barriers,
+    }));
 
 };
 
