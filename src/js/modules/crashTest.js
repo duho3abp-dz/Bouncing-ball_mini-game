@@ -15,7 +15,11 @@ const crashTest = (elem, widthObs, heightObs, gameBall) => {
             defeat: false
         };
     }
-    if (leftStyleBall <= leftStyleObstacle + widthObs &&
+    
+    if (leftStyleBall <= leftStyleObstacle &&
+        leftStyleBall + 50 >= leftStyleObstacle &&
+        bottomStyleBall <= heightObs ||
+        leftStyleBall <= leftStyleObstacle + widthObs &&
         leftStyleBall + 50 >= leftStyleObstacle + widthObs &&
         bottomStyleBall <= heightObs) {
         return {

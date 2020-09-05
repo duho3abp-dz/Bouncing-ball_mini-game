@@ -760,9 +760,9 @@ const background = (bg) => {
           decorNine = document.createElement('div'),
           decorTen = document.createElement('div');
 
-    startDecorOne.classList.add('start-decor_one');
-    startDecorTwo.classList.add('start-decor_two');
-    startDecorThree.classList.add('start-decor_three');
+          startDecorOne.classList.add('start-decor_one');
+          startDecorTwo.classList.add('start-decor_two');
+          startDecorThree.classList.add('start-decor_three');
 
     decorOne.classList.add('decor_one');
     decorTwo.classList.add('decor_two');
@@ -775,9 +775,9 @@ const background = (bg) => {
     decorNine.classList.add('decor_nine');
     decorTen.classList.add('decor_ten');
 
-    bg.append(startDecorOne);
     bg.append(startDecorTwo);
     bg.append(startDecorThree);
+    bg.append(startDecorOne);
 
     bg.append(decorOne);
     bg.append(decorTwo);
@@ -822,7 +822,11 @@ const crashTest = (elem, widthObs, heightObs, gameBall) => {
             defeat: false
         };
     }
-    if (leftStyleBall <= leftStyleObstacle + widthObs &&
+    
+    if (leftStyleBall <= leftStyleObstacle &&
+        leftStyleBall + 50 >= leftStyleObstacle &&
+        bottomStyleBall <= heightObs ||
+        leftStyleBall <= leftStyleObstacle + widthObs &&
         leftStyleBall + 50 >= leftStyleObstacle + widthObs &&
         bottomStyleBall <= heightObs) {
         return {
