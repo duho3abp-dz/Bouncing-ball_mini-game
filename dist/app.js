@@ -432,12 +432,19 @@ const game = ({
     // -------------------------LOGIC-------------------------
 
     const winningOrLosingAction = (position, mess) => {
-        document.querySelector('.popup-content').innerHTML = `
-            <h1>${message[mess]}</h1>
-            <H2>Очков набрано: ${counter}</H2><hr>
-            <h2>РЕКОРД ПО ОЧКАМ: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])(counter)}</h2><hr>
-        `;
-
+        if (localStorage.getItem('score') < Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])(counter)) {
+            document.querySelector('.popup-content').innerHTML = `
+                <h1>${message[mess]}</h1>
+                <H2>Очков набрано: ${counter}</H2><hr>
+                <h2>УРА!!! НОВЫЙ РЕКОРД ПО ОЧКАМ <br> ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])(counter)}</h2><hr>
+            `;
+        } else {
+            document.querySelector('.popup-content').innerHTML = `
+                <h1>${message[mess]}</h1>
+                <H2>Очков набрано: ${counter}</H2><hr>
+                <h2>РЕКОРД ПО ОЧКАМ: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])(counter)}</h2><hr>
+            `;
+        }
         Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["setScoreRecord"])(counter);
         counter = 0;
         clearInterval(intervalStart);
@@ -455,9 +462,9 @@ const game = ({
     const animateObstacle = (elem, position, widthObs, heightObs) => {
         if (!stop) {
             const obj = Object(_modules_crashTest__WEBPACK_IMPORTED_MODULE_1__["default"])(elem, widthObs, heightObs, gameBall);
+
             if (obj) {
                 const {finish, defeat, count} = obj;
-
                 if (count) {
                     document.querySelector('.counter').innerHTML = `
                         ОЧКИ:

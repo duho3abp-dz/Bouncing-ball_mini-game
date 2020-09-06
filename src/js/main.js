@@ -27,12 +27,19 @@ const game = ({
     // -------------------------LOGIC-------------------------
 
     const winningOrLosingAction = (position, mess) => {
-        document.querySelector('.popup-content').innerHTML = `
-            <h1>${message[mess]}</h1>
-            <H2>Очков набрано: ${counter}</H2><hr>
-            <h2>РЕКОРД ПО ОЧКАМ: ${getScoreRecord(counter)}</h2><hr>
-        `;
-
+        if (localStorage.getItem('score') < getScoreRecord(counter)) {
+            document.querySelector('.popup-content').innerHTML = `
+                <h1>${message[mess]}</h1>
+                <H2>Очков набрано: ${counter}</H2><hr>
+                <h2>УРА!!! НОВЫЙ РЕКОРД: <br> ${getScoreRecord(counter)}</h2><hr>
+            `;
+        } else {
+            document.querySelector('.popup-content').innerHTML = `
+                <h1>${message[mess]}</h1>
+                <H2>Очков набрано: ${counter}</H2><hr>
+                <h2>РЕКОРД ПО ОЧКАМ: ${getScoreRecord(counter)}</h2><hr>
+            `;
+        }
         setScoreRecord(counter);
         counter = 0;
         clearInterval(intervalStart);
@@ -50,9 +57,9 @@ const game = ({
     const animateObstacle = (elem, position, widthObs, heightObs) => {
         if (!stop) {
             const obj = crashTest(elem, widthObs, heightObs, gameBall);
+
             if (obj) {
                 const {finish, defeat, count} = obj;
-
                 if (count) {
                     document.querySelector('.counter').innerHTML = `
                         ОЧКИ:
