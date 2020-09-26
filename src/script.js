@@ -6,7 +6,7 @@ import game from './js/main';
 window.addEventListener('DOMContentLoaded', () => {
 
     game({
-        numberObstaclesFinish: [5, 20, 30, 40, 50],
+        numberObstaclesFinish: [3, 5, 30, 40, 50],
         obstacleRefreshRate: 2000,
         jumpSetting: [
             {keyCode: 81, maxHeight: 200},

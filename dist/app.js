@@ -436,7 +436,7 @@ const game = ({
             document.querySelector('.popup-content').innerHTML = `
                 <h1>${message[mess]}</h1>
                 <H2>Очков набрано: ${counter}</H2><hr>
-                <h2>УРА!!! НОВЫЙ РЕКОРД ПО ОЧКАМ <br> ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])(counter)}</h2><hr>
+                <h2>УРА!!! НОВЫЙ РЕКОРД: <br> ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])(counter)}</h2><hr>
             `;
         } else {
             document.querySelector('.popup-content').innerHTML = `
@@ -481,9 +481,15 @@ const game = ({
                 }
             }
         
+
             position = position + 5;
-            elem.style.left = `${position}px`;
-            requestAnimationFrame(() => animateObstacle(elem, position, widthObs, heightObs));
+            if (position < (window.outerWidth + 1000)) {
+                elem.style.left = `${position}px`;
+                requestAnimationFrame(() => animateObstacle(elem, position, widthObs, heightObs));
+            } else {
+                elem.remove();
+                cancelAnimationFrame(animateObstacle);
+            }
         }
     };
 
@@ -518,11 +524,18 @@ const game = ({
         intervalStart = setInterval(createObstacleAndStartAnimate, obstacleRefreshRate);
     };
 
-    const testCheck = (elems, block) => {
+    const startGameForPoints = (popup, quantities) => {
+        // clearBtnsStyle({btns: quantities});
+        finish = '';
+        popup.style.display = 'none';
+        startGame();
+    };
+
+    const testCheck = (elems, block, active) => {
         let test = [];
 
         elems.forEach((elem, i) => {
-            if (elem.style.background === 'rgb(255, 255, 255)') { test[i] = elem; }
+            if (elem.classList.contains(active)) { test[i] = elem; }
         });
 
         if (test.length) {
@@ -555,7 +568,7 @@ const game = ({
             <h3>E - высокий прыжок</h3><hr>
             <h2>РЕКОРД ПО ОЧКАМ: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])()}</h2><hr>
         </div>
-        <div class="btn barriers">БАРЬЕРЫ</div>
+        <div class="btn barriers btn--active">БАРЬЕРЫ</div>
         <div class="btn point">НА ОЧКИ</div>
     `;
     barriers.innerHTML = `
@@ -563,7 +576,7 @@ const game = ({
             <h1>Настройки</h1><hr>
             <h3>Количество ограждений до финиша:</h3>
             <div class="options__wrap">
-                <div class="btn-quantity">${numberObstaclesFinish[0]}</div>
+                <div class="btn-quantity btn-quantity--active">${numberObstaclesFinish[0]}</div>
                 <div class="btn-quantity">${numberObstaclesFinish[1]}</div>
                 <div class="btn-quantity">${numberObstaclesFinish[2]}</div>
                 <div class="btn-quantity">${numberObstaclesFinish[3]}</div>
@@ -602,21 +615,17 @@ const game = ({
           quantities = document.querySelectorAll('.btn-quantity');
 
     quantities.forEach((quantity, i) => quantity.addEventListener('click', () => {
-        Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__["clearBtnsStyle"])({btns: quantities});
-        Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__["selectButton"])({btn: quantity});
+        quantities.forEach(btn => btn.classList.remove('btn-quantity--active'));
+        quantity.classList.add('btn-quantity--active');
 
         finish = numberObstaclesFinish[i];
     }));
 
-    btnStart.addEventListener('click', () => testCheck(quantities, barriers));
-    btnPoint.addEventListener('click', () => {
-        Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__["clearBtnsStyle"])({btns: quantities});
-        finish = '';
-        popup.style.display = 'none';
-        startGame();
-    });
+    btnStart.addEventListener('click', () => testCheck(quantities, barriers, 'btn-quantity--active'));
+    btnPoint.addEventListener('click', () => startGameForPoints(popup, quantities));
 
     document.addEventListener('keydown', event => {
+        
         jumpSetting.forEach(obj => {
             const {keyCode, maxHeight} = obj;
 
@@ -628,23 +637,59 @@ const game = ({
             }); 
         });
 
+        console.log(event.keyCode);
+
         if (event.keyCode === 13) {
-            if (window.getComputedStyle(barriers).display === 'flex') {
-                testCheck(quantities, barriers);
+            if (barriers.style.display !== 'none') {
+                if (btnStart.classList.contains('btn--active')) {
+                    testCheck(quantities, barriers, 'btn-quantity--active');
+                }
+                if (btnBack.classList.contains('btn--active')) {
+                    Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
+                        popapShow: popup, 
+                        popapHide: barriers,
+                    });
+                    btnBack.classList.remove('btn--active');
+                    return;
+                }
             }
-            if (window.getComputedStyle(popup).display === 'flex') { 
-                Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
-                    popapShow: barriers, 
-                    popapHide: popup,
-                });
+            if (popup.style.display !== 'none') {
+                if (btnBarriers.classList.contains('btn--active')) {
+                    Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
+                        popapShow: barriers, 
+                        popapHide: popup,
+                    });
+                    btnStart.classList.add('btn--active');
+                    if (!finish) { finish = numberObstaclesFinish[0]; }
+                    return;
+                }
+                if (btnPoint.classList.contains('btn--active')) {
+                    startGameForPoints(popup, quantities)
+                }
+            }
+        }
+
+        if (popup.style.display !== 'none') {
+            if (event.keyCode === 40 || event.keyCode === 38) {
+                Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__["toggleButton"])('.game__popup .btn', 'btn--active');
+            }
+        }
+        if (barriers.style.display !== 'none') {
+            if (event.keyCode === 40 || event.keyCode === 38) {
+                Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__["toggleButton"])('.game__menu .btn', 'btn--active');
             }
         }
     });
 
-    btnBarriers.addEventListener('click', () => Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
-        popapShow: barriers, 
-        popapHide: popup,
-    }));
+    btnBarriers.addEventListener('click', () => {
+        if (!finish) { finish = numberObstaclesFinish[0]; }
+        btnStart.classList.add('btn--active');
+        Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
+            popapShow: barriers, 
+            popapHide: popup,
+        });
+    });
+
     btnBack.addEventListener('click', () => Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
         popapShow: popup, 
         popapHide: barriers,
@@ -760,31 +805,22 @@ const startAnimateBall = ({
 /*!********************************************!*\
   !*** ./src/js/modules/animationButtons.js ***!
   \********************************************/
-/*! exports provided: clearBtnsStyle, selectButton */
+/*! exports provided: toggleButton */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearBtnsStyle", function() { return clearBtnsStyle; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectButton", function() { return selectButton; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleButton", function() { return toggleButton; });
 
 
-const clearBtnsStyle = ({
-    btns, 
-    colorBg = '#000', 
-    colorText = '#fff'
-}) => btns.forEach(btn => {
-    btn.style.color = colorText;
-    btn.style.background = colorBg;
-});
-
-const selectButton = ({
-    btn, 
-    colorBg = '#fff', 
-    colorText = '#000'
-}) => {
-    btn.style.color = colorText;
-    btn.style.background = colorBg;
+const toggleButton = (btnsClass, active) => {
+    document.querySelectorAll(btnsClass).forEach(btn => {
+        if (btn.classList.contains(active)) {
+            btn.classList.remove(active);
+        } else {
+            btn.classList.add(active);
+        }
+    });
 };
 
 /***/ }),
@@ -981,7 +1017,7 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', () => {
 
     Object(_js_main__WEBPACK_IMPORTED_MODULE_2__["default"])({
-        numberObstaclesFinish: [5, 20, 30, 40, 50],
+        numberObstaclesFinish: [3, 5, 30, 40, 50],
         obstacleRefreshRate: 2000,
         jumpSetting: [
             {keyCode: 81, maxHeight: 200},
