@@ -401,8 +401,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_crashTest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/crashTest */ "./src/js/modules/crashTest.js");
 /* harmony import */ var _modules_backgroundAnimate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/backgroundAnimate */ "./src/js/modules/backgroundAnimate.js");
 /* harmony import */ var _modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/hideShowModal */ "./src/js/modules/hideShowModal.js");
-/* harmony import */ var _modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/scoreRecord */ "./src/js/modules/scoreRecord.js");
-/* harmony import */ var _modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/animationButtons */ "./src/js/modules/animationButtons.js");
+/* harmony import */ var _modules_animationButtons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/animationButtons */ "./src/js/modules/animationButtons.js");
+/* harmony import */ var _modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/scoreRecord */ "./src/js/modules/scoreRecord.js");
 
 
 
@@ -424,6 +424,7 @@ const game = ({
 
     let intervalStart,
         finish,
+        index,
         passed = 0,
         stop = false,
         counter = 0;
@@ -432,20 +433,20 @@ const game = ({
     // -------------------------LOGIC-------------------------
 
     const winningOrLosingAction = (position, mess) => {
-        if (localStorage.getItem('score') < Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])(counter)) {
+        if (localStorage.getItem('score') < Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)) {
             document.querySelector('.popup-content').innerHTML = `
                 <h1>${message[mess]}</h1>
                 <H2>Очков набрано: ${counter}</H2><hr>
-                <h2>УРА!!! НОВЫЙ РЕКОРД: <br> ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])(counter)}</h2><hr>
+                <h2>УРА!!! НОВЫЙ РЕКОРД: <br> ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)}</h2><hr>
             `;
         } else {
             document.querySelector('.popup-content').innerHTML = `
                 <h1>${message[mess]}</h1>
                 <H2>Очков набрано: ${counter}</H2><hr>
-                <h2>РЕКОРД ПО ОЧКАМ: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])(counter)}</h2><hr>
+                <h2>РЕКОРД ПО ОЧКАМ: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)}</h2><hr>
             `;
         }
-        Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["setScoreRecord"])(counter);
+        Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["setScoreRecord"])(counter);
         counter = 0;
         clearInterval(intervalStart);
         position = position;
@@ -525,7 +526,6 @@ const game = ({
     };
 
     const startGameForPoints = (popup, quantities) => {
-        // clearBtnsStyle({btns: quantities});
         finish = '';
         popup.style.display = 'none';
         startGame();
@@ -542,6 +542,28 @@ const game = ({
             block.style.display = 'none';
             startGame();
         }
+    };
+
+    const clearAndAddClassQuantyties = (quantities, quantity, i) => {
+        quantities.forEach(btn => btn.classList.remove('btn-quantity--active'));
+        quantity.classList.add('btn-quantity--active');
+        finish = numberObstaclesFinish[i];
+    };
+
+    const switchingQuantyties = (quantities, num) => {
+        quantities.forEach((quantity, i) => {
+            if (quantity.classList.contains('btn-quantity--active')) {
+                if (num === 37) {
+                    index = i - 1;
+                }
+                if (num === 39) {
+                    index = i + 1;
+                }
+            }
+        });
+        quantities.forEach((quantity, i) => {
+            if (i === index) { clearAndAddClassQuantyties(quantities, quantity, i); }
+        });
     };
 
     // --------------------------------------------------------
@@ -566,7 +588,7 @@ const game = ({
             <h3>Q - маленький прыжок</h3>
             <h3>W - средний прыжок</h3>
             <h3>E - высокий прыжок</h3><hr>
-            <h2>РЕКОРД ПО ОЧКАМ: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_4__["getScoreRecord"])()}</h2><hr>
+            <h2>РЕКОРД ПО ОЧКАМ: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])()}</h2><hr>
         </div>
         <div class="btn barriers btn--active">БАРЬЕРЫ</div>
         <div class="btn point">НА ОЧКИ</div>
@@ -615,10 +637,7 @@ const game = ({
           quantities = document.querySelectorAll('.btn-quantity');
 
     quantities.forEach((quantity, i) => quantity.addEventListener('click', () => {
-        quantities.forEach(btn => btn.classList.remove('btn-quantity--active'));
-        quantity.classList.add('btn-quantity--active');
-
-        finish = numberObstaclesFinish[i];
+        clearAndAddClassQuantyties(quantities, quantity, i);
     }));
 
     btnStart.addEventListener('click', () => testCheck(quantities, barriers, 'btn-quantity--active'));
@@ -636,8 +655,6 @@ const game = ({
                 element: gameBall
             }); 
         });
-
-        console.log(event.keyCode);
 
         if (event.keyCode === 13) {
             if (barriers.style.display !== 'none') {
@@ -671,12 +688,18 @@ const game = ({
 
         if (popup.style.display !== 'none') {
             if (event.keyCode === 40 || event.keyCode === 38) {
-                Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__["toggleButton"])('.game__popup .btn', 'btn--active');
+                Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_4__["default"])('.game__popup .btn', 'btn--active');
             }
         }
         if (barriers.style.display !== 'none') {
             if (event.keyCode === 40 || event.keyCode === 38) {
-                Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_5__["toggleButton"])('.game__menu .btn', 'btn--active');
+                Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_4__["default"])('.game__menu .btn', 'btn--active');
+            }
+            if (event.keyCode === 39) {
+                switchingQuantyties(quantities, 39);
+            }
+            if (event.keyCode === 37) {
+                switchingQuantyties(quantities, 37);
             }
         }
     });
@@ -805,12 +828,11 @@ const startAnimateBall = ({
 /*!********************************************!*\
   !*** ./src/js/modules/animationButtons.js ***!
   \********************************************/
-/*! exports provided: toggleButton */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleButton", function() { return toggleButton; });
 
 
 const toggleButton = (btnsClass, active) => {
@@ -822,6 +844,8 @@ const toggleButton = (btnsClass, active) => {
         }
     });
 };
+
+/* harmony default export */ __webpack_exports__["default"] = (toggleButton);
 
 /***/ }),
 
@@ -1017,7 +1041,7 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', () => {
 
     Object(_js_main__WEBPACK_IMPORTED_MODULE_2__["default"])({
-        numberObstaclesFinish: [3, 5, 30, 40, 50],
+        numberObstaclesFinish: [10, 20, 30, 40, 50],
         obstacleRefreshRate: 2000,
         jumpSetting: [
             {keyCode: 81, maxHeight: 200},

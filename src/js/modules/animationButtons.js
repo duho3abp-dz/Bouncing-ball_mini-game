@@ -1,6 +1,6 @@
 'use strict';
 
-export const toggleButton = (btnsClass, active) => {
+const toggleButton = (btnsClass, active) => {
     document.querySelectorAll(btnsClass).forEach(btn => {
         if (btn.classList.contains(active)) {
             btn.classList.remove(active);
@@ -9,3 +9,5 @@ export const toggleButton = (btnsClass, active) => {
         }
     });
 };
+
+export default toggleButton;

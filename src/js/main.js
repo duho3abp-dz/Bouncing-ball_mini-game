@@ -4,8 +4,8 @@ import startAnimateBall from './modules/animateBall';
 import crashTest from './modules/crashTest';
 import background from './modules/backgroundAnimate';
 import hideShowModal from './modules/hideShowModal';
+import toggleButton from './modules/animationButtons';
 import {getScoreRecord, setScoreRecord} from './modules/scoreRecord';
-import {clearBtnsStyle, selectButton, toggleButton} from './modules/animationButtons';
 
 const game = ({
     numberObstaclesFinish,
@@ -19,6 +19,7 @@ const game = ({
 
     let intervalStart,
         finish,
+        index,
         passed = 0,
         stop = false,
         counter = 0;
@@ -120,7 +121,6 @@ const game = ({
     };
 
     const startGameForPoints = (popup, quantities) => {
-        // clearBtnsStyle({btns: quantities});
         finish = '';
         popup.style.display = 'none';
         startGame();
@@ -137,6 +137,28 @@ const game = ({
             block.style.display = 'none';
             startGame();
         }
+    };
+
+    const clearAndAddClassQuantyties = (quantities, quantity, i) => {
+        quantities.forEach(btn => btn.classList.remove('btn-quantity--active'));
+        quantity.classList.add('btn-quantity--active');
+        finish = numberObstaclesFinish[i];
+    };
+
+    const switchingQuantyties = (quantities, num) => {
+        quantities.forEach((quantity, i) => {
+            if (quantity.classList.contains('btn-quantity--active')) {
+                if (num === 37) {
+                    index = i - 1;
+                }
+                if (num === 39) {
+                    index = i + 1;
+                }
+            }
+        });
+        quantities.forEach((quantity, i) => {
+            if (i === index) { clearAndAddClassQuantyties(quantities, quantity, i); }
+        });
     };
 
     // --------------------------------------------------------
@@ -210,10 +232,7 @@ const game = ({
           quantities = document.querySelectorAll('.btn-quantity');
 
     quantities.forEach((quantity, i) => quantity.addEventListener('click', () => {
-        quantities.forEach(btn => btn.classList.remove('btn-quantity--active'));
-        quantity.classList.add('btn-quantity--active');
-
-        finish = numberObstaclesFinish[i];
+        clearAndAddClassQuantyties(quantities, quantity, i);
     }));
 
     btnStart.addEventListener('click', () => testCheck(quantities, barriers, 'btn-quantity--active'));
@@ -231,8 +250,6 @@ const game = ({
                 element: gameBall
             }); 
         });
-
-        console.log(event.keyCode);
 
         if (event.keyCode === 13) {
             if (barriers.style.display !== 'none') {
@@ -272,6 +289,12 @@ const game = ({
         if (barriers.style.display !== 'none') {
             if (event.keyCode === 40 || event.keyCode === 38) {
                 toggleButton('.game__menu .btn', 'btn--active');
+            }
+            if (event.keyCode === 39) {
+                switchingQuantyties(quantities, 39);
+            }
+            if (event.keyCode === 37) {
+                switchingQuantyties(quantities, 37);
             }
         }
     });
