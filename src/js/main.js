@@ -126,7 +126,7 @@ const game = ({
         intervalStart = setInterval(createObstacleAndStartAnimate, obstacleRefreshRate);
     };
 
-    const startGameForPoints = (popup, quantities) => {
+    const startGameForPoints = (popup) => {
         finish = '';
         popup.style.display = 'none';
         startGame();
@@ -182,6 +182,9 @@ const game = ({
     barriers.classList.add('game__menu');
     gameWindow.classList.add('game__window');
     gameBall.classList.add('game__ball');
+
+    popup.style.display = 'flex';
+    barriers.style.display = 'none';
 
     popup.innerHTML = `
         <div class="popup-content"> 
@@ -281,7 +284,9 @@ const game = ({
         });
 
         if (event.keyCode === 13) {
+
             if (barriers.style.display !== 'none') {
+                
                 if (btnStart.classList.contains(btnActive)) {
                     testCheck(quantities, barriers, quantityActive);
                 }
@@ -305,7 +310,7 @@ const game = ({
                     return;
                 }
                 if (btnPoint.classList.contains(btnActive)) {
-                    startGameForPoints(popup, quantities)
+                    startGameForPoints(popup);
                 }
             }
         }

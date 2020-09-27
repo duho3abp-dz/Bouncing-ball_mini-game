@@ -531,7 +531,7 @@ const game = ({
         intervalStart = setInterval(createObstacleAndStartAnimate, obstacleRefreshRate);
     };
 
-    const startGameForPoints = (popup, quantities) => {
+    const startGameForPoints = (popup) => {
         finish = '';
         popup.style.display = 'none';
         startGame();
@@ -645,6 +645,9 @@ const game = ({
           btnBack = document.querySelector('.back'),
           quantities = document.querySelectorAll('.btn-quantity');
 
+    barriers.style.display = 'none';
+    popup.style.display = 'flex';
+
     // ********** Click Event ********** //
 
     quantities.forEach((quantity, i) => quantity.addEventListener('click', () => {
@@ -686,7 +689,9 @@ const game = ({
         });
 
         if (event.keyCode === 13) {
+
             if (barriers.style.display !== 'none') {
+                
                 if (btnStart.classList.contains(btnActive)) {
                     testCheck(quantities, barriers, quantityActive);
                 }
@@ -710,7 +715,7 @@ const game = ({
                     return;
                 }
                 if (btnPoint.classList.contains(btnActive)) {
-                    startGameForPoints(popup, quantities)
+                    startGameForPoints(popup);
                 }
             }
         }
