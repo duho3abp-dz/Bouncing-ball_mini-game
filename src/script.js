@@ -14,9 +14,9 @@ window.addEventListener('DOMContentLoaded', () => {
             {keyCode: 69, maxHeight: 450}
         ],
         message: {
-            greeting: 'Мини-игра "Прыгающий мяч"',
-            victory: 'Победа!',
-            defeat: 'К сожалению не получилось, попробуйте еще раз'
+            greeting: 'Bouncing ball',
+            victory: 'You won!',
+            defeat: 'Oops, try again'
         }
     });
 

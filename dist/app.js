@@ -436,14 +436,16 @@ const game = ({
         if (localStorage.getItem('score') < Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)) {
             document.querySelector('.popup-content').innerHTML = `
                 <h1>${message[mess]}</h1>
-                <H2>Очков набрано: ${counter}</H2><hr>
-                <h2>УРА!!! НОВЫЙ РЕКОРД: <br> ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)}</h2><hr>
+                <h2>Points scored: ${counter}</h2><hr>
+                <h2 class="popup-content__text--bg">Yes! New record: <br> 
+                    ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)}
+                </h2><hr>
             `;
         } else {
             document.querySelector('.popup-content').innerHTML = `
                 <h1>${message[mess]}</h1>
-                <H2>Очков набрано: ${counter}</H2><hr>
-                <h2>РЕКОРД ПО ОЧКАМ: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)}</h2><hr>
+                <h2>Points scored: ${counter}</h2><hr>
+                <h2 class="popup-content__text--bg">Points record: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)}</h2><hr>
             `;
         }
         Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["setScoreRecord"])(counter);
@@ -455,7 +457,7 @@ const game = ({
         popup.style.display = 'flex';
 
         document.querySelector('.counter').innerHTML = `
-            ОЧКИ:
+            points:
             <p>${counter}</p>
         `;
     };
@@ -468,7 +470,7 @@ const game = ({
                 const {finish, defeat, count} = obj;
                 if (count) {
                     document.querySelector('.counter').innerHTML = `
-                        ОЧКИ:
+                        points:
                         <p>${counter++}</p>
                     `;
                 }
@@ -503,7 +505,9 @@ const game = ({
         passed++;
         if (passed === finish) {
             obstacle.style.background = 'rgb(88, 7, 7)';
-            obstacle.style.border = 'black 3px solid';
+            obstacle.style.borderTop = 'black 3px solid';
+            obstacle.style.borderLeft = 'black 3px solid';
+            obstacle.style.borderRight = 'black 3px solid';
         }
 
         obstacle.classList.add('game__obstacle');
@@ -584,19 +588,21 @@ const game = ({
 
     popup.innerHTML = `
         <div class="popup-content"> 
-            <h1>${message.greeting}</h1><hr>
-            <h3>Q - маленький прыжок</h3>
-            <h3>W - средний прыжок</h3>
-            <h3>E - высокий прыжок</h3><hr>
-            <h2>РЕКОРД ПО ОЧКАМ: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])()}</h2><hr>
+            <h1 class="popup-content__text--bg">${message.greeting}</h1><hr>
+            <h3>Q - little jump</h3>
+            <h3>W - middle jump</h3>
+            <h3>E - high jump</h3><hr>
+            <h2 class="popup-content__text--bg">
+                Points record: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])()}
+            </h2><hr>
         </div>
-        <div class="btn barriers btn--active">БАРЬЕРЫ</div>
-        <div class="btn point">НА ОЧКИ</div>
+        <div class="btn barriers btn--active">arcade</div>
+        <div class="btn point">infinity</div>
     `;
     barriers.innerHTML = `
         <div class="options__content"> 
-            <h1>Настройки</h1><hr>
-            <h3>Количество ограждений до финиша:</h3>
+            <h1>Settings</h1><hr>
+            <h3>Number of obstacles to finish:</h3>
             <div class="options__wrap">
                 <div class="btn-quantity btn-quantity--active">${numberObstaclesFinish[0]}</div>
                 <div class="btn-quantity">${numberObstaclesFinish[1]}</div>
@@ -606,12 +612,12 @@ const game = ({
             </div>
             <hr>
         </div>
-        <div class="btn start">НАЧАТЬ</div>
-        <div class="btn back">НАЗАД</div>
+        <div class="btn start">start</div>
+        <div class="btn back">back</div>
     `;
     gameWindow.innerHTML = `
         <div class="counter">
-            ОЧКИ:
+            points:
             <p>${counter}</p>
         </div>
     `;
@@ -636,12 +642,30 @@ const game = ({
           btnBack = document.querySelector('.back'),
           quantities = document.querySelectorAll('.btn-quantity');
 
+    // ********** Click Event ********** //
+
     quantities.forEach((quantity, i) => quantity.addEventListener('click', () => {
         clearAndAddClassQuantyties(quantities, quantity, i);
     }));
 
     btnStart.addEventListener('click', () => testCheck(quantities, barriers, 'btn-quantity--active'));
     btnPoint.addEventListener('click', () => startGameForPoints(popup, quantities));
+
+    btnBarriers.addEventListener('click', () => {
+        if (!finish) { finish = numberObstaclesFinish[0]; }
+        btnStart.classList.add('btn--active');
+        Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
+            popapShow: barriers, 
+            popapHide: popup,
+        });
+    });
+
+    btnBack.addEventListener('click', () => Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
+        popapShow: popup, 
+        popapHide: barriers,
+    }));
+
+    // ********** Keydown Event ********** //
 
     document.addEventListener('keydown', event => {
         
@@ -703,20 +727,6 @@ const game = ({
             }
         }
     });
-
-    btnBarriers.addEventListener('click', () => {
-        if (!finish) { finish = numberObstaclesFinish[0]; }
-        btnStart.classList.add('btn--active');
-        Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
-            popapShow: barriers, 
-            popapHide: popup,
-        });
-    });
-
-    btnBack.addEventListener('click', () => Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
-        popapShow: popup, 
-        popapHide: barriers,
-    }));
 
 };
 
@@ -1049,9 +1059,9 @@ window.addEventListener('DOMContentLoaded', () => {
             {keyCode: 69, maxHeight: 450}
         ],
         message: {
-            greeting: 'Мини-игра "Прыгающий мяч"',
-            victory: 'Победа!',
-            defeat: 'К сожалению не получилось, попробуйте еще раз'
+            greeting: 'Bouncing ball',
+            victory: 'You won!',
+            defeat: 'Oops, try again'
         }
     });
 
