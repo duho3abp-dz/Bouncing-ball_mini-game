@@ -1,0 +1,7 @@
+@font-face {
+    font-family: 'freckle_faceregular';
+    src: url('../fonts/freckleface-regular-webfont.woff') format('woff'),
+         url('../fonts/freckleface-regular-webfont.svg#freckle_faceregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

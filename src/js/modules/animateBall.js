@@ -1,5 +1,7 @@
 'use strict';
 
+import ballPhysics from './ballPhysics';
+
 let heightBounce = 0,
     reduction = 0;
 
@@ -37,12 +39,13 @@ const animateBallDown = ({
     
     heightBounce = heightBounce - speed + reduction;
     element.style.bottom = `${heightBounce}px`;
-
+    
     if (heightBounce > 0) {
         requestAnimationFrame(() => animateBallDown({element, speed, maxHeight}));    
     }
     if (heightBounce <= 0) {
-        element.style.bottom = '0px';
+        element.style.bottom = '-2px';
+        ballPhysics(element);
     }
 };
 
@@ -55,6 +58,8 @@ const animateBallUp = ({
     
     heightBounce = heightBounce + speed - reduction;
     element.style.bottom = `${heightBounce}px`;
+    element.style.bottom = `${heightBounce}px`;
+    element.style.height = `${60}px`;
 
     if (heightBounce < maxHeight) {
         requestAnimationFrame(() => animateBallUp({element, speed, maxHeight}));

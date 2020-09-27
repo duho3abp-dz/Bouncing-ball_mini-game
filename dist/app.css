@@ -5,10 +5,12 @@ body {
   overflow: hidden;
   display: flex;
   justify-content: center;
-  align-items: center; }
+  align-items: center;
+  font-family: 'freckle_faceregular', 'Comic Sans MS';
+  font-size: 18px; }
 
 .game__window {
-  height: 500px;
+  height: 550px;
   width: 97%;
   background: #fff;
   overflow: hidden;
@@ -20,12 +22,10 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-family: 'Comic Sans MS';
-    font-size: 16px;
     background: #000;
     color: #fff;
     text-transform: uppercase;
-    border-radius: 5px;
+    border-radius: 30px;
     width: 8%;
     height: 100px;
     top: 5px;
@@ -40,7 +40,7 @@ body {
   width: 50px;
   background: #000;
   position: absolute;
-  bottom: 0px;
+  bottom: -2px;
   left: 50%;
   border-radius: 50%;
   z-index: 15; }
@@ -75,39 +75,39 @@ body {
   background: #fff;
   width: 50%;
   height: 550px;
-  border-radius: 5px;
+  border-radius: 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   overflow: hidden; }
-  .game__popup .popup-content {
-    font-family: 'Comic Sans MS';
-    font-size: 18px; }
-    .game__popup .popup-content__text--bg {
-      text-transform: uppercase; }
+  .game__popup .popup-content h1 {
+    font-size: 50px; }
+  .game__popup .popup-content__text--bg {
+    text-transform: uppercase; }
 
 .game__menu {
   background: #fff;
   width: 50%;
   height: 550px;
-  border-radius: 5px;
+  border-radius: 100px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   overflow: hidden;
   display: none; }
-  .game__menu .options__content {
-    font-family: 'Comic Sans MS';
-    font-size: 18px; }
   .game__menu .options__wrap {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    text-align: center; }
+    flex-wrap: wrap;
+    text-align: center;
+    border-top: 5px solid #000;
+    border-bottom: 5px solid #000;
+    margin-bottom: 20px; }
     .game__menu .options__wrap .btn-quantity {
       font-size: 25px;
       background: #000;
@@ -115,13 +115,13 @@ body {
       border-radius: 5px;
       border: black 5px solid;
       padding: 5px 10px;
+      margin: 5px;
       cursor: pointer; }
       .game__menu .options__wrap .btn-quantity--active {
-        color: #000;
-        background: #fff; }
+        background: #fff;
+        color: #000; }
 
 .btn {
-  font-family: 'Comic Sans MS';
   font-size: 25px;
   background: #000;
   color: #fff;
@@ -137,6 +137,13 @@ body {
 
 .back {
   font-size: 16px; }
+
+.duho3abp_dz {
+  width: fit-content;
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  color: #fff; }
 
 .start-decor_one {
   width: 200px;

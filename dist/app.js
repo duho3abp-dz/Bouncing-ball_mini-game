@@ -416,7 +416,9 @@ const game = ({
     numberObstaclesFinish,
     obstacleRefreshRate,
     jumpSetting,
-    message
+    message,
+    btnActive,
+    quantityActive
 }) => {
 
     // --------------------------------------------------------
@@ -547,16 +549,16 @@ const game = ({
             startGame();
         }
     };
-
+    quantityActive
     const clearAndAddClassQuantyties = (quantities, quantity, i) => {
-        quantities.forEach(btn => btn.classList.remove('btn-quantity--active'));
-        quantity.classList.add('btn-quantity--active');
+        quantities.forEach(btn => btn.classList.remove(quantityActive));
+        quantity.classList.add(quantityActive);
         finish = numberObstaclesFinish[i];
     };
 
     const switchingQuantyties = (quantities, num) => {
         quantities.forEach((quantity, i) => {
-            if (quantity.classList.contains('btn-quantity--active')) {
+            if (quantity.classList.contains(quantityActive)) {
                 if (num === 37) {
                     index = i - 1;
                 }
@@ -588,32 +590,33 @@ const game = ({
 
     popup.innerHTML = `
         <div class="popup-content"> 
-            <h1 class="popup-content__text--bg">${message.greeting}</h1><hr>
+            <h1 class="popup-content__text--bg">${message.greeting}</h1>
             <h3>Q - little jump</h3>
             <h3>W - middle jump</h3>
-            <h3>E - high jump</h3><hr>
+            <h3>E - high jump</h3>
             <h2 class="popup-content__text--bg">
                 Points record: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])()}
-            </h2><hr>
+            </h2>
         </div>
-        <div class="btn barriers btn--active">arcade</div>
+        <div class="btn barriers ${btnActive}">arcade</div>
         <div class="btn point">infinity</div>
+        <div class="duho3abp_dz">duho3abp_dz</div>
     `;
     barriers.innerHTML = `
         <div class="options__content"> 
-            <h1>Settings</h1><hr>
+            <h1>Settings</h1>
             <h3>Number of obstacles to finish:</h3>
             <div class="options__wrap">
-                <div class="btn-quantity btn-quantity--active">${numberObstaclesFinish[0]}</div>
+                <div class="btn-quantity ${quantityActive}">${numberObstaclesFinish[0]}</div>
                 <div class="btn-quantity">${numberObstaclesFinish[1]}</div>
                 <div class="btn-quantity">${numberObstaclesFinish[2]}</div>
                 <div class="btn-quantity">${numberObstaclesFinish[3]}</div>
                 <div class="btn-quantity">${numberObstaclesFinish[4]}</div>
             </div>
-            <hr>
         </div>
         <div class="btn start">start</div>
         <div class="btn back">back</div>
+        <div class="duho3abp_dz">duho3abp_dz</div>
     `;
     gameWindow.innerHTML = `
         <div class="counter">
@@ -648,22 +651,24 @@ const game = ({
         clearAndAddClassQuantyties(quantities, quantity, i);
     }));
 
-    btnStart.addEventListener('click', () => testCheck(quantities, barriers, 'btn-quantity--active'));
+    btnStart.addEventListener('click', () => testCheck(quantities, barriers, quantityActive));
     btnPoint.addEventListener('click', () => startGameForPoints(popup, quantities));
 
     btnBarriers.addEventListener('click', () => {
         if (!finish) { finish = numberObstaclesFinish[0]; }
-        btnStart.classList.add('btn--active');
+        btnStart.classList.add(btnActive);
         Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
             popapShow: barriers, 
             popapHide: popup,
         });
     });
 
-    btnBack.addEventListener('click', () => Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
-        popapShow: popup, 
-        popapHide: barriers,
-    }));
+    btnBack.addEventListener('click', () => {
+        Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
+            popapShow: popup, 
+            popapHide: barriers,
+        });
+    });
 
     // ********** Keydown Event ********** //
 
@@ -682,29 +687,29 @@ const game = ({
 
         if (event.keyCode === 13) {
             if (barriers.style.display !== 'none') {
-                if (btnStart.classList.contains('btn--active')) {
-                    testCheck(quantities, barriers, 'btn-quantity--active');
+                if (btnStart.classList.contains(btnActive)) {
+                    testCheck(quantities, barriers, quantityActive);
                 }
-                if (btnBack.classList.contains('btn--active')) {
+                if (btnBack.classList.contains(btnActive)) {
                     Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
                         popapShow: popup, 
                         popapHide: barriers,
                     });
-                    btnBack.classList.remove('btn--active');
+                    btnBack.classList.remove(btnActive);
                     return;
                 }
             }
             if (popup.style.display !== 'none') {
-                if (btnBarriers.classList.contains('btn--active')) {
+                if (btnBarriers.classList.contains(btnActive)) {
                     Object(_modules_hideShowModal__WEBPACK_IMPORTED_MODULE_3__["default"])({
                         popapShow: barriers, 
                         popapHide: popup,
                     });
-                    btnStart.classList.add('btn--active');
+                    btnStart.classList.add(btnActive);
                     if (!finish) { finish = numberObstaclesFinish[0]; }
                     return;
                 }
-                if (btnPoint.classList.contains('btn--active')) {
+                if (btnPoint.classList.contains(btnActive)) {
                     startGameForPoints(popup, quantities)
                 }
             }
@@ -712,12 +717,12 @@ const game = ({
 
         if (popup.style.display !== 'none') {
             if (event.keyCode === 40 || event.keyCode === 38) {
-                Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_4__["default"])('.game__popup .btn', 'btn--active');
+                Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_4__["default"])('.game__popup .btn', btnActive);
             }
         }
         if (barriers.style.display !== 'none') {
             if (event.keyCode === 40 || event.keyCode === 38) {
-                Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_4__["default"])('.game__menu .btn', 'btn--active');
+                Object(_modules_animationButtons__WEBPACK_IMPORTED_MODULE_4__["default"])('.game__menu .btn', btnActive);
             }
             if (event.keyCode === 39) {
                 switchingQuantyties(quantities, 39);
@@ -743,6 +748,9 @@ const game = ({
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ballPhysics__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ballPhysics */ "./src/js/modules/ballPhysics.js");
+
+
 
 
 let heightBounce = 0,
@@ -782,12 +790,13 @@ const animateBallDown = ({
     
     heightBounce = heightBounce - speed + reduction;
     element.style.bottom = `${heightBounce}px`;
-
+    
     if (heightBounce > 0) {
         requestAnimationFrame(() => animateBallDown({element, speed, maxHeight}));    
     }
     if (heightBounce <= 0) {
-        element.style.bottom = '0px';
+        element.style.bottom = '-2px';
+        Object(_ballPhysics__WEBPACK_IMPORTED_MODULE_0__["default"])(element);
     }
 };
 
@@ -800,6 +809,8 @@ const animateBallUp = ({
     
     heightBounce = heightBounce + speed - reduction;
     element.style.bottom = `${heightBounce}px`;
+    element.style.bottom = `${heightBounce}px`;
+    element.style.height = `${60}px`;
 
     if (heightBounce < maxHeight) {
         requestAnimationFrame(() => animateBallUp({element, speed, maxHeight}));
@@ -919,6 +930,48 @@ const background = (bg) => {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (background);
+
+/***/ }),
+
+/***/ "./src/js/modules/ballPhysics.js":
+/*!***************************************!*\
+  !*** ./src/js/modules/ballPhysics.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+
+const ballPhysics = (element) => {
+    let heightBallLand = 40,
+        radiusBallLand = 40;
+
+    const setChangesStyle = (h, r) => {
+        element.style.height = `${h}px`;
+        element.style.borderBottomLeftRadius = `${r}%`;
+        element.style.borderBottomRightRadius = `${r}%`;    
+    };
+
+    const returnToNormal = () => {
+        heightBallLand++;
+        radiusBallLand++;
+
+        if (heightBallLand < 50 && radiusBallLand < 50) {
+            setChangesStyle(heightBallLand, radiusBallLand);        
+            requestAnimationFrame(returnToNormal)
+        } else {
+            setChangesStyle(heightBallLand, radiusBallLand);
+        }
+    };
+
+    setChangesStyle(heightBallLand, radiusBallLand);
+
+    requestAnimationFrame(returnToNormal);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (ballPhysics);
 
 /***/ }),
 
@@ -1062,7 +1115,9 @@ window.addEventListener('DOMContentLoaded', () => {
             greeting: 'Bouncing ball',
             victory: 'You won!',
             defeat: 'Oops, try again'
-        }
+        },
+        btnActive: 'btn--active',
+        quantityActive: 'btn-quantity--active'
     });
 
 });

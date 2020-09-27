@@ -17,7 +17,9 @@ window.addEventListener('DOMContentLoaded', () => {
             greeting: 'Bouncing ball',
             victory: 'You won!',
             defeat: 'Oops, try again'
-        }
+        },
+        btnActive: 'btn--active',
+        quantityActive: 'btn-quantity--active'
     });
 
 });
