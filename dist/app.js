@@ -108,6 +108,39 @@
 
 /***/ }),
 
+/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/media/laptop.scss":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/media/laptop.scss ***!
+  \***********************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/media/phones.scss":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/media/phones.scss ***!
+  \***********************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/media/tablets.scss":
+/*!************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/media/tablets.scss ***!
+  \************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js":
 /*!****************************************************************************!*\
   !*** ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
@@ -413,9 +446,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const game = ({
+    ballHeight,
+    ballWidth,
     numberObstaclesFinish,
     obstacleRefreshRate,
     jumpSetting,
+    jumpControl,
     message,
     btnActive,
     quantityActive
@@ -549,7 +585,7 @@ const game = ({
             startGame();
         }
     };
-    quantityActive
+    
     const clearAndAddClassQuantyties = (quantities, quantity, i) => {
         quantities.forEach(btn => btn.classList.remove(quantityActive));
         quantity.classList.add(quantityActive);
@@ -588,18 +624,29 @@ const game = ({
     gameWindow.classList.add('game__window');
     gameBall.classList.add('game__ball');
 
+    // popup.style.display = 'flex';
+    barriers.style.display = 'none';
+    gameBall.style.width = `${ballWidth}px`;
+    gameBall.style.height = `${ballHeight}px`;
+
     popup.innerHTML = `
         <div class="popup-content"> 
             <h1 class="popup-content__text--bg">${message.greeting}</h1>
-            <h3>Q - little jump</h3>
-            <h3>W - middle jump</h3>
-            <h3>E - high jump</h3>
+            <h3 class="media-close">Q - little jump</h3>
+            <h3 class="media-close">W - middle jump</h3>
+            <h3 class="media-close">E - high jump</h3>
             <h2 class="popup-content__text--bg">
                 Points record: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])()}
             </h2>
         </div>
+
         <div class="btn barriers ${btnActive}">arcade</div>
         <div class="btn point">infinity</div>
+
+        <div class="flip">
+            <img class="img" src="../icons/flip.svg" alt="flip">
+        </div>
+
         <div class="duho3abp_dz">duho3abp_dz</div>
     `;
     barriers.innerHTML = `
@@ -623,6 +670,19 @@ const game = ({
             points:
             <p>${counter}</p>
         </div>
+
+        <div class="control-panel">
+            <a class="control-panel__btn control-panel__btn--white">
+                <img class="img" data-high src="../icons/high.svg" alt="high">
+            </a>
+            <a class="control-panel__btn">
+                <img class="control-panel__btn--middle" data-middle src="../icons/middle.svg" alt="middle">
+            </a>
+            <a class="control-panel__btn">
+                <img class="control-panel__btn--little" data-little src="../icons/little.svg" alt="little">
+            </a>
+        </div>
+        
     `;
     gameBall.innerHTML = `
         <div class="flare"></div>
@@ -634,8 +694,8 @@ const game = ({
     document.body.append(gameWindow);
     gameWindow.append(gameBall);
     
-    Object(_modules_backgroundAnimate__WEBPACK_IMPORTED_MODULE_2__["default"])(gameWindow);
-
+    if (window.innerWidth > 1025) { Object(_modules_backgroundAnimate__WEBPACK_IMPORTED_MODULE_2__["default"])(gameWindow); }
+    
     // --------------------------------------------------------
     // -------------------------EVENT-------------------------
 
@@ -643,15 +703,27 @@ const game = ({
           btnPoint = document.querySelector('.point'),
           btnStart = document.querySelector('.start'),
           btnBack = document.querySelector('.back'),
-          quantities = document.querySelectorAll('.btn-quantity');
-
-    barriers.style.display = 'none';
-    popup.style.display = 'flex';
+          quantities = document.querySelectorAll('.btn-quantity'),
+          controlBtns = document.querySelectorAll('.control-panel__btn');
 
     // ********** Click Event ********** //
 
     quantities.forEach((quantity, i) => quantity.addEventListener('click', () => {
         clearAndAddClassQuantyties(quantities, quantity, i);
+    }));
+
+    controlBtns.forEach(controlBtn => controlBtn.addEventListener('click', event => {
+        jumpControl.forEach(obj => {
+            const {alt, maxHeight} = obj;
+
+            Object(_modules_animateBall__WEBPACK_IMPORTED_MODULE_0__["default"])({
+                ballHeight,
+                event, 
+                alt, 
+                maxHeight,
+                element: gameBall
+            }); 
+        });
     }));
 
     btnStart.addEventListener('click', () => testCheck(quantities, barriers, quantityActive));
@@ -679,8 +751,9 @@ const game = ({
         
         jumpSetting.forEach(obj => {
             const {keyCode, maxHeight} = obj;
-
+            
             Object(_modules_animateBall__WEBPACK_IMPORTED_MODULE_0__["default"])({
+                ballHeight,
                 event, 
                 keyCode, 
                 maxHeight,
@@ -787,6 +860,7 @@ const speedReduction = ({
 };
 
 const animateBallDown = ({
+    ballHeight,
     element, 
     speed, 
     maxHeight
@@ -797,15 +871,16 @@ const animateBallDown = ({
     element.style.bottom = `${heightBounce}px`;
     
     if (heightBounce > 0) {
-        requestAnimationFrame(() => animateBallDown({element, speed, maxHeight}));    
+        requestAnimationFrame(() => animateBallDown({ballHeight, element, speed, maxHeight}));    
     }
     if (heightBounce <= 0) {
         element.style.bottom = '-2px';
-        Object(_ballPhysics__WEBPACK_IMPORTED_MODULE_0__["default"])(element);
+        Object(_ballPhysics__WEBPACK_IMPORTED_MODULE_0__["default"])(element, ballHeight);
     }
 };
 
 const animateBallUp = ({
+    ballHeight,
     element, 
     speed, 
     maxHeight
@@ -815,33 +890,48 @@ const animateBallUp = ({
     heightBounce = heightBounce + speed - reduction;
     element.style.bottom = `${heightBounce}px`;
     element.style.bottom = `${heightBounce}px`;
-    element.style.height = `${60}px`;
+    element.style.height = `${ballHeight + 10}px`;
 
     if (heightBounce < maxHeight) {
-        requestAnimationFrame(() => animateBallUp({element, speed, maxHeight}));
+        requestAnimationFrame(() => animateBallUp({ballHeight, element, speed, maxHeight}));
     }
     if (heightBounce >= maxHeight) {
-        requestAnimationFrame(() => animateBallDown({element, speed, maxHeight}));
+        requestAnimationFrame(() => animateBallDown({ballHeight, element, speed, maxHeight}));
+    }
+};
+
+const testAnimate = (element, ballHeight, speed, maxHeight, descent) => {
+    const bottom = element.style.bottom.replace(/px/, '');
+    if (element.style.bottom === '0px' || element.style.bottom === '' || +bottom <= 0) {
+        requestAnimationFrame(() => animateBallUp({
+            ballHeight,
+            element,
+            speed, 
+            maxHeight,
+            descent
+        }));     
     }
 };
 
 const startAnimateBall = ({
+    ballHeight,
     event, 
     keyCode, 
     element, 
     speed = 10, 
     maxHeight, 
-    descent = 5
+    descent = 5,
+    alt
 }) => {
-    if (event.keyCode === keyCode) {
-        const bottom = element.style.bottom.replace(/px/, '');
-        if (element.style.bottom === '0px' || element.style.bottom === '' || +bottom <= 0) {
-            requestAnimationFrame(() => animateBallUp({
-                element,
-                speed, 
-                maxHeight,
-                descent
-            }));     
+    if (event.keyCode && keyCode) {
+        if (event.keyCode === keyCode) {
+            testAnimate(element, ballHeight, speed, maxHeight, descent)
+        }
+    }
+    
+    if (event.target.alt && alt) {
+        if (event.target.alt === alt) {
+            testAnimate(element, ballHeight, speed, maxHeight, descent)
         }
     }
 };
@@ -949,8 +1039,8 @@ const background = (bg) => {
 __webpack_require__.r(__webpack_exports__);
 
 
-const ballPhysics = (element) => {
-    let heightBallLand = 40,
+const ballPhysics = (element, ballHeight) => {
+    let heightBallLand = ballHeight - 10,
         radiusBallLand = 40;
 
     const setChangesStyle = (h, r) => {
@@ -963,7 +1053,7 @@ const ballPhysics = (element) => {
         heightBallLand++;
         radiusBallLand++;
 
-        if (heightBallLand < 50 && radiusBallLand < 50) {
+        if (heightBallLand < ballHeight && radiusBallLand < 50) {
             setChangesStyle(heightBallLand, radiusBallLand);        
             requestAnimationFrame(returnToNormal)
         } else {
@@ -1100,7 +1190,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scss_main_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_scss_main_scss__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _scss_animate_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scss/animate.scss */ "./src/scss/animate.scss");
 /* harmony import */ var _scss_animate_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_scss_animate_scss__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _js_main__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./js/main */ "./src/js/main.js");
+/* harmony import */ var _scss_media_laptop_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scss/media/laptop.scss */ "./src/scss/media/laptop.scss");
+/* harmony import */ var _scss_media_laptop_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_scss_media_laptop_scss__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _scss_media_tablets_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./scss/media/tablets.scss */ "./src/scss/media/tablets.scss");
+/* harmony import */ var _scss_media_tablets_scss__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_scss_media_tablets_scss__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _scss_media_phones_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scss/media/phones.scss */ "./src/scss/media/phones.scss");
+/* harmony import */ var _scss_media_phones_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_scss_media_phones_scss__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _js_main__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./js/main */ "./src/js/main.js");
+
+
+
 
 
 
@@ -1108,21 +1207,48 @@ __webpack_require__.r(__webpack_exports__);
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    Object(_js_main__WEBPACK_IMPORTED_MODULE_2__["default"])({
-        numberObstaclesFinish: [10, 20, 30, 40, 50],
-        obstacleRefreshRate: 2000,
-        jumpSetting: [
+    let ballWidth = 50,
+        ballHeight = 50,
+        jumpSetting = [
             {keyCode: 81, maxHeight: 200},
             {keyCode: 87, maxHeight: 300},
             {keyCode: 69, maxHeight: 450}
         ],
+        jumpControl = [
+            {alt: 'little', maxHeight: 200},
+            {alt: 'middle', maxHeight: 300},
+            {alt: 'high', maxHeight: 450}
+        ];
+
+    if (window.innerWidth < 750) { 
+        ballWidth = 35;
+        ballHeight = 35;
+        jumpSetting = [
+            {keyCode: 81, maxHeight: 100},
+            {keyCode: 87, maxHeight: 150},
+            {keyCode: 69, maxHeight: 250}
+        ];
+        jumpControl = [
+            {alt: 'little', maxHeight: 100},
+            {alt: 'middle', maxHeight: 150},
+            {alt: 'high', maxHeight: 250}
+        ];
+    }
+
+    Object(_js_main__WEBPACK_IMPORTED_MODULE_5__["default"])({
+        ballHeight,
+        ballWidth,
+        numberObstaclesFinish: [10, 20, 30, 40, 50],
+        obstacleRefreshRate: 2000,
+        jumpSetting,
+        jumpControl,
         message: {
             greeting: 'Bouncing ball',
             victory: 'You won!',
             defeat: 'Oops, try again'
         },
         btnActive: 'btn--active',
-        quantityActive: 'btn-quantity--active'
+        quantityActive: 'btn-quantity--active',
     });
 
 });
@@ -1168,6 +1294,93 @@ module.exports = content.locals || {};
 
 var api = __webpack_require__(/*! ../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
             var content = __webpack_require__(/*! !../../node_modules/mini-css-extract-plugin/dist/loader.js!../../node_modules/css-loader/dist/cjs.js!../../node_modules/sass-loader/dist/cjs.js!./main.scss */ "./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/main.scss");
+
+            content = content.__esModule ? content.default : content;
+
+            if (typeof content === 'string') {
+              content = [[module.i, content, '']];
+            }
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = api(content, options);
+
+
+
+module.exports = content.locals || {};
+
+/***/ }),
+
+/***/ "./src/scss/media/laptop.scss":
+/*!************************************!*\
+  !*** ./src/scss/media/laptop.scss ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var api = __webpack_require__(/*! ../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+            var content = __webpack_require__(/*! !../../../node_modules/mini-css-extract-plugin/dist/loader.js!../../../node_modules/css-loader/dist/cjs.js!../../../node_modules/sass-loader/dist/cjs.js!./laptop.scss */ "./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/media/laptop.scss");
+
+            content = content.__esModule ? content.default : content;
+
+            if (typeof content === 'string') {
+              content = [[module.i, content, '']];
+            }
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = api(content, options);
+
+
+
+module.exports = content.locals || {};
+
+/***/ }),
+
+/***/ "./src/scss/media/phones.scss":
+/*!************************************!*\
+  !*** ./src/scss/media/phones.scss ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var api = __webpack_require__(/*! ../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+            var content = __webpack_require__(/*! !../../../node_modules/mini-css-extract-plugin/dist/loader.js!../../../node_modules/css-loader/dist/cjs.js!../../../node_modules/sass-loader/dist/cjs.js!./phones.scss */ "./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/media/phones.scss");
+
+            content = content.__esModule ? content.default : content;
+
+            if (typeof content === 'string') {
+              content = [[module.i, content, '']];
+            }
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = api(content, options);
+
+
+
+module.exports = content.locals || {};
+
+/***/ }),
+
+/***/ "./src/scss/media/tablets.scss":
+/*!*************************************!*\
+  !*** ./src/scss/media/tablets.scss ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var api = __webpack_require__(/*! ../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+            var content = __webpack_require__(/*! !../../../node_modules/mini-css-extract-plugin/dist/loader.js!../../../node_modules/css-loader/dist/cjs.js!../../../node_modules/sass-loader/dist/cjs.js!./tablets.scss */ "./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/media/tablets.scss");
 
             content = content.__esModule ? content.default : content;
 

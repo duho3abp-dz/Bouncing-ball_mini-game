@@ -31,6 +31,7 @@ const speedReduction = ({
 };
 
 const animateBallDown = ({
+    ballHeight,
     element, 
     speed, 
     maxHeight
@@ -41,15 +42,16 @@ const animateBallDown = ({
     element.style.bottom = `${heightBounce}px`;
     
     if (heightBounce > 0) {
-        requestAnimationFrame(() => animateBallDown({element, speed, maxHeight}));    
+        requestAnimationFrame(() => animateBallDown({ballHeight, element, speed, maxHeight}));    
     }
     if (heightBounce <= 0) {
         element.style.bottom = '-2px';
-        ballPhysics(element);
+        ballPhysics(element, ballHeight);
     }
 };
 
 const animateBallUp = ({
+    ballHeight,
     element, 
     speed, 
     maxHeight
@@ -59,33 +61,48 @@ const animateBallUp = ({
     heightBounce = heightBounce + speed - reduction;
     element.style.bottom = `${heightBounce}px`;
     element.style.bottom = `${heightBounce}px`;
-    element.style.height = `${60}px`;
+    element.style.height = `${ballHeight + 10}px`;
 
     if (heightBounce < maxHeight) {
-        requestAnimationFrame(() => animateBallUp({element, speed, maxHeight}));
+        requestAnimationFrame(() => animateBallUp({ballHeight, element, speed, maxHeight}));
     }
     if (heightBounce >= maxHeight) {
-        requestAnimationFrame(() => animateBallDown({element, speed, maxHeight}));
+        requestAnimationFrame(() => animateBallDown({ballHeight, element, speed, maxHeight}));
+    }
+};
+
+const testAnimate = (element, ballHeight, speed, maxHeight, descent) => {
+    const bottom = element.style.bottom.replace(/px/, '');
+    if (element.style.bottom === '0px' || element.style.bottom === '' || +bottom <= 0) {
+        requestAnimationFrame(() => animateBallUp({
+            ballHeight,
+            element,
+            speed, 
+            maxHeight,
+            descent
+        }));     
     }
 };
 
 const startAnimateBall = ({
+    ballHeight,
     event, 
     keyCode, 
     element, 
     speed = 10, 
     maxHeight, 
-    descent = 5
+    descent = 5,
+    alt
 }) => {
-    if (event.keyCode === keyCode) {
-        const bottom = element.style.bottom.replace(/px/, '');
-        if (element.style.bottom === '0px' || element.style.bottom === '' || +bottom <= 0) {
-            requestAnimationFrame(() => animateBallUp({
-                element,
-                speed, 
-                maxHeight,
-                descent
-            }));     
+    if (event.keyCode && keyCode) {
+        if (event.keyCode === keyCode) {
+            testAnimate(element, ballHeight, speed, maxHeight, descent)
+        }
+    }
+    
+    if (event.target.alt && alt) {
+        if (event.target.alt === alt) {
+            testAnimate(element, ballHeight, speed, maxHeight, descent)
         }
     }
 };

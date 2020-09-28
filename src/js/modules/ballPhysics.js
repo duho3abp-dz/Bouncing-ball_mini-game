@@ -1,7 +1,7 @@
 'use strict';
 
-const ballPhysics = (element) => {
-    let heightBallLand = 40,
+const ballPhysics = (element, ballHeight) => {
+    let heightBallLand = ballHeight - 10,
         radiusBallLand = 40;
 
     const setChangesStyle = (h, r) => {
@@ -14,7 +14,7 @@ const ballPhysics = (element) => {
         heightBallLand++;
         radiusBallLand++;
 
-        if (heightBallLand < 50 && radiusBallLand < 50) {
+        if (heightBallLand < ballHeight && radiusBallLand < 50) {
             setChangesStyle(heightBallLand, radiusBallLand);        
             requestAnimationFrame(returnToNormal)
         } else {

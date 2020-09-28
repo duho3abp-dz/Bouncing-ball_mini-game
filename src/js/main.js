@@ -8,9 +8,12 @@ import toggleButton from './modules/animationButtons';
 import {getScoreRecord, setScoreRecord} from './modules/scoreRecord';
 
 const game = ({
+    ballHeight,
+    ballWidth,
     numberObstaclesFinish,
     obstacleRefreshRate,
     jumpSetting,
+    jumpControl,
     message,
     btnActive,
     quantityActive
@@ -144,7 +147,7 @@ const game = ({
             startGame();
         }
     };
-    quantityActive
+    
     const clearAndAddClassQuantyties = (quantities, quantity, i) => {
         quantities.forEach(btn => btn.classList.remove(quantityActive));
         quantity.classList.add(quantityActive);
@@ -183,21 +186,29 @@ const game = ({
     gameWindow.classList.add('game__window');
     gameBall.classList.add('game__ball');
 
-    popup.style.display = 'flex';
+    // popup.style.display = 'flex';
     barriers.style.display = 'none';
+    gameBall.style.width = `${ballWidth}px`;
+    gameBall.style.height = `${ballHeight}px`;
 
     popup.innerHTML = `
         <div class="popup-content"> 
             <h1 class="popup-content__text--bg">${message.greeting}</h1>
-            <h3>Q - little jump</h3>
-            <h3>W - middle jump</h3>
-            <h3>E - high jump</h3>
+            <h3 class="media-close">Q - little jump</h3>
+            <h3 class="media-close">W - middle jump</h3>
+            <h3 class="media-close">E - high jump</h3>
             <h2 class="popup-content__text--bg">
                 Points record: ${getScoreRecord()}
             </h2>
         </div>
+
         <div class="btn barriers ${btnActive}">arcade</div>
         <div class="btn point">infinity</div>
+
+        <div class="flip">
+            <img class="img" src="../icons/flip.svg" alt="flip">
+        </div>
+
         <div class="duho3abp_dz">duho3abp_dz</div>
     `;
     barriers.innerHTML = `
@@ -221,6 +232,19 @@ const game = ({
             points:
             <p>${counter}</p>
         </div>
+
+        <div class="control-panel">
+            <a class="control-panel__btn control-panel__btn--white">
+                <img class="img" data-high src="../icons/high.svg" alt="high">
+            </a>
+            <a class="control-panel__btn">
+                <img class="control-panel__btn--middle" data-middle src="../icons/middle.svg" alt="middle">
+            </a>
+            <a class="control-panel__btn">
+                <img class="control-panel__btn--little" data-little src="../icons/little.svg" alt="little">
+            </a>
+        </div>
+        
     `;
     gameBall.innerHTML = `
         <div class="flare"></div>
@@ -232,8 +256,8 @@ const game = ({
     document.body.append(gameWindow);
     gameWindow.append(gameBall);
     
-    background(gameWindow);
-
+    if (window.innerWidth > 1025) { background(gameWindow); }
+    
     // --------------------------------------------------------
     // -------------------------EVENT-------------------------
 
@@ -241,12 +265,27 @@ const game = ({
           btnPoint = document.querySelector('.point'),
           btnStart = document.querySelector('.start'),
           btnBack = document.querySelector('.back'),
-          quantities = document.querySelectorAll('.btn-quantity');
+          quantities = document.querySelectorAll('.btn-quantity'),
+          controlBtns = document.querySelectorAll('.control-panel__btn');
 
     // ********** Click Event ********** //
 
     quantities.forEach((quantity, i) => quantity.addEventListener('click', () => {
         clearAndAddClassQuantyties(quantities, quantity, i);
+    }));
+
+    controlBtns.forEach(controlBtn => controlBtn.addEventListener('click', event => {
+        jumpControl.forEach(obj => {
+            const {alt, maxHeight} = obj;
+
+            startAnimateBall({
+                ballHeight,
+                event, 
+                alt, 
+                maxHeight,
+                element: gameBall
+            }); 
+        });
     }));
 
     btnStart.addEventListener('click', () => testCheck(quantities, barriers, quantityActive));
@@ -274,8 +313,9 @@ const game = ({
         
         jumpSetting.forEach(obj => {
             const {keyCode, maxHeight} = obj;
-
+            
             startAnimateBall({
+                ballHeight,
                 event, 
                 keyCode, 
                 maxHeight,

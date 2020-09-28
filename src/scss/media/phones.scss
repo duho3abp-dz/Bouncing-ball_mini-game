@@ -1,0 +1,62 @@
+@media screen and (max-width: 415px) and  (max-height: 737px) {
+    .popup-content {
+        display: none;
+    }
+    .btn {
+        display: none;
+    }
+    .flip {
+        display: block;
+    }
+    .game__popup {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 376px) and  (max-height: 812px) {
+    .game__popup {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 321px) and  (max-height: 569px) {
+    .game__popup {
+        height: 400px;
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 736px) and  (max-height: 414px) {
+    h2 {
+        font-size: 18px !important;
+    }
+    .game__window {
+        height: 300px;
+    }
+    .game__popup, .game__menu {
+        height: 330px;
+        width: 70%;
+        font-size: 16px;
+    }
+    .btn {
+        font-size: 16px;
+        padding: 2px 5px;
+    }
+    .btn-quantity {
+        font-size: 16px !important;
+        padding: 2px 5px !important;
+    }
+    .control-panel {
+        height: 200px;
+    }
+    .control-panel__btn {
+        width: 45px;
+        height: 45px;
+    }
+    .counter {
+        height: 60px !important;
+    }
+    .flare, .shadow {
+        display: none !important;
+    }
+}
