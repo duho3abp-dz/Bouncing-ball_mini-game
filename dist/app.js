@@ -446,8 +446,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const game = ({
+    flipSrc,
+    highBtnSrc,
+    middleBtnSrc,
+    littleBtnSrc,
     ballHeight,
     ballWidth,
+    maxHeightObst,
+    minHeightObst,
+    maxWidthObst,
+    minWidthObst,
     numberObstaclesFinish,
     obstacleRefreshRate,
     jumpSetting,
@@ -474,16 +482,16 @@ const game = ({
         if (localStorage.getItem('score') < Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)) {
             document.querySelector('.popup-content').innerHTML = `
                 <h1>${message[mess]}</h1>
-                <h2>Points scored: ${counter}</h2><hr>
+                <h2>Points scored: ${counter}</h2>
                 <h2 class="popup-content__text--bg">Yes! New record: <br> 
                     ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)}
-                </h2><hr>
+                </h2>
             `;
         } else {
             document.querySelector('.popup-content').innerHTML = `
                 <h1>${message[mess]}</h1>
-                <h2>Points scored: ${counter}</h2><hr>
-                <h2 class="popup-content__text--bg">Points record: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)}</h2><hr>
+                <h2>Points scored: ${counter}</h2>
+                <h2 class="popup-content__text--bg">Points record: ${Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["getScoreRecord"])(counter)}</h2>
             `;
         }
         Object(_modules_scoreRecord__WEBPACK_IMPORTED_MODULE_5__["setScoreRecord"])(counter);
@@ -536,8 +544,8 @@ const game = ({
 
     const createObstacleAndStartAnimate = () => {
         const obstacle = document.createElement('div'),
-              randomHeight = Math.floor(Math.random() * 300 + 50),
-              randomWidth = Math.floor(Math.random() * 80 + 5);
+              randomHeight = Math.floor(Math.random() * maxHeightObst + minHeightObst),
+              randomWidth = Math.floor(Math.random() * maxWidthObst + minWidthObst);
         let position = -80;
 
         passed++;
@@ -624,7 +632,7 @@ const game = ({
     gameWindow.classList.add('game__window');
     gameBall.classList.add('game__ball');
 
-    // popup.style.display = 'flex';
+    popup.style.display = 'flex';
     barriers.style.display = 'none';
     gameBall.style.width = `${ballWidth}px`;
     gameBall.style.height = `${ballHeight}px`;
@@ -644,10 +652,8 @@ const game = ({
         <div class="btn point">infinity</div>
 
         <div class="flip">
-            <img class="img" src="../icons/flip.svg" alt="flip">
+            <img class="img" src=${flipSrc} alt="flip">
         </div>
-
-        <div class="duho3abp_dz">duho3abp_dz</div>
     `;
     barriers.innerHTML = `
         <div class="options__content"> 
@@ -663,7 +669,6 @@ const game = ({
         </div>
         <div class="btn start">start</div>
         <div class="btn back">back</div>
-        <div class="duho3abp_dz">duho3abp_dz</div>
     `;
     gameWindow.innerHTML = `
         <div class="counter">
@@ -672,14 +677,14 @@ const game = ({
         </div>
 
         <div class="control-panel">
-            <a class="control-panel__btn control-panel__btn--white">
-                <img class="img" data-high src="../icons/high.svg" alt="high">
+            <a id="high" class="control-panel__btn control-panel__btn--white">
+                <img class="img" data-high src=${highBtnSrc} alt="high">
             </a>
-            <a class="control-panel__btn">
-                <img class="control-panel__btn--middle" data-middle src="../icons/middle.svg" alt="middle">
+            <a id="middle" class="control-panel__btn">
+                <img class="control-panel__btn--middle" data-middle src=${middleBtnSrc} alt="middle">
             </a>
-            <a class="control-panel__btn">
-                <img class="control-panel__btn--little" data-little src="../icons/little.svg" alt="little">
+            <a id="little" class="control-panel__btn">
+                <img class="control-panel__btn--little" data-little src=${littleBtnSrc} alt="little">
             </a>
         </div>
         
@@ -713,13 +718,14 @@ const game = ({
     }));
 
     controlBtns.forEach(controlBtn => controlBtn.addEventListener('click', event => {
+        console.dir(event.target.id);
         jumpControl.forEach(obj => {
-            const {alt, maxHeight} = obj;
+            const {id, maxHeight} = obj;
 
             Object(_modules_animateBall__WEBPACK_IMPORTED_MODULE_0__["default"])({
                 ballHeight,
                 event, 
-                alt, 
+                id, 
                 maxHeight,
                 element: gameBall
             }); 
@@ -921,7 +927,7 @@ const startAnimateBall = ({
     speed = 10, 
     maxHeight, 
     descent = 5,
-    alt
+    id
 }) => {
     if (event.keyCode && keyCode) {
         if (event.keyCode === keyCode) {
@@ -929,8 +935,8 @@ const startAnimateBall = ({
         }
     }
     
-    if (event.target.alt && alt) {
-        if (event.target.alt === alt) {
+    if (event.target.id && id || event.target.alt && id) {
+        if (event.target.alt === id || event.target.id === id) {
             testAnimate(element, ballHeight, speed, maxHeight, descent)
         }
     }
@@ -1207,8 +1213,17 @@ __webpack_require__.r(__webpack_exports__);
 
 window.addEventListener('DOMContentLoaded', () => {
 
+    const flipSrc = 'icons/flip.svg',
+          highBtnSrc = 'icons/high.svg',
+          middleBtnSrc = 'icons/middle.svg',
+          littleBtnSrc = 'icons/little.svg';
+
     let ballWidth = 50,
         ballHeight = 50,
+        maxHeightObst = 300,
+        minHeightObst = 50,
+        maxWidthObst = 80,
+        minWidthObst = 5,
         jumpSetting = [
             {keyCode: 81, maxHeight: 200},
             {keyCode: 87, maxHeight: 300},
@@ -1220,24 +1235,36 @@ window.addEventListener('DOMContentLoaded', () => {
             {alt: 'high', maxHeight: 450}
         ];
 
-    if (window.innerWidth < 750) { 
+    if (window.innerWidth < 850) { 
         ballWidth = 35;
         ballHeight = 35;
+        maxHeightObst = 180;
+        minHeightObst = 50;
+        maxWidthObst = 30;
+        minWidthObst = 5;
         jumpSetting = [
-            {keyCode: 81, maxHeight: 100},
-            {keyCode: 87, maxHeight: 150},
+            {keyCode: 81, maxHeight: 150},
+            {keyCode: 87, maxHeight: 200},
             {keyCode: 69, maxHeight: 250}
         ];
         jumpControl = [
-            {alt: 'little', maxHeight: 100},
-            {alt: 'middle', maxHeight: 150},
-            {alt: 'high', maxHeight: 250}
+            {id: 'little', maxHeight: 150},
+            {id: 'middle', maxHeight: 200},
+            {id: 'high', maxHeight: 250}
         ];
     }
 
     Object(_js_main__WEBPACK_IMPORTED_MODULE_5__["default"])({
+        flipSrc,
+        highBtnSrc,
+        middleBtnSrc,
+        littleBtnSrc,
         ballHeight,
         ballWidth,
+        maxHeightObst,
+        minHeightObst,
+        maxWidthObst,
+        minWidthObst,
         numberObstaclesFinish: [10, 20, 30, 40, 50],
         obstacleRefreshRate: 2000,
         jumpSetting,
@@ -1248,7 +1275,7 @@ window.addEventListener('DOMContentLoaded', () => {
             defeat: 'Oops, try again'
         },
         btnActive: 'btn--active',
-        quantityActive: 'btn-quantity--active',
+        quantityActive: 'btn-quantity--active'
     });
 
 });

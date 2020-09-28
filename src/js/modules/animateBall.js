@@ -92,7 +92,7 @@ const startAnimateBall = ({
     speed = 10, 
     maxHeight, 
     descent = 5,
-    alt
+    id
 }) => {
     if (event.keyCode && keyCode) {
         if (event.keyCode === keyCode) {
@@ -100,8 +100,8 @@ const startAnimateBall = ({
         }
     }
     
-    if (event.target.alt && alt) {
-        if (event.target.alt === alt) {
+    if (event.target.id && id || event.target.alt && id) {
+        if (event.target.alt === id || event.target.id === id) {
             testAnimate(element, ballHeight, speed, maxHeight, descent)
         }
     }

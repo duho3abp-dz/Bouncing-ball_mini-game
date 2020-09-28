@@ -1,18 +1,8 @@
-@media screen and (max-width: 769px) and  (max-height: 1025px) {
+@media screen and (max-width: 769px) {
     .media-close {
         display: none;
     }
     .start-decor_three {
         display: none !important;
-    }
-}
-
-@media screen and (max-width: 1025px) and  (max-height: 769px) {
-    .btn--active {
-        color: #fff;
-        background: #000;
-    }
-    .control-panel {
-        display: flex;
     }
 }

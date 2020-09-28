@@ -1,0 +1,12 @@
+@media screen and (max-width: 1025px) {
+    .btn--active {
+        color: #fff;
+        background: #000;
+    }
+    .control-panel {
+        display: flex;
+    }
+    .flare, .shadow {
+        display: none !important;
+    }
+}
