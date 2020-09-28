@@ -52,27 +52,13 @@ body {
         bottom: -2px;
         left: 65%;
         border-radius: 50%;
+        border: 1px dotted #fff;
         z-index: 15;
 
-        &  .flare {
-            background: #fff;
-            width: 20px;
-            height: 20px;
-            position: absolute;
-            border-radius: 50%;
-            top: 7px;
-            left: 20px;
-            opacity: .7;
-        }
-        & .shadow {
-            background: #000;
-            width: 30px;
-            height: 30px;
-            position: absolute;
-            border-radius: 50%;
-            top: 8px;
-            left: 10px;
-        }
+        animation-name: ball-spinning;
+        animation-timing-function: linear;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
     }
     &__obstacle {
         background: #000;
@@ -88,6 +74,7 @@ body {
         width: 50%;
         height: 550px;
         border-radius: 100px;
+        border: 2px dotted #000;
         display: flex;
         // display: none;
         flex-direction: column;
@@ -110,6 +97,7 @@ body {
         width: 50%;
         height: 550px;
         border-radius: 100px;
+        border: 2px dotted #000;
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -219,4 +207,20 @@ body {
     bottom: 10px;
     right: 20px;
     color: #fff;
+}
+
+.stop-animation {
+    animation-name: none;
+}
+.start-animation {
+    animation-name: ball-spinning;
+}
+
+@keyframes ball-spinning {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(-360deg);
+    }
 }

@@ -251,10 +251,6 @@ const game = ({
         </div>
         
     `;
-    gameBall.innerHTML = `
-        <div class="flare"></div>
-        <div class="shadow"></div>
-    `;
 
     document.body.append(popup);
     document.body.append(barriers);

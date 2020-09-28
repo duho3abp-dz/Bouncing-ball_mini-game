@@ -44,24 +44,12 @@ body {
   bottom: -2px;
   left: 65%;
   border-radius: 50%;
-  z-index: 15; }
-  .game__ball .flare {
-    background: #fff;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    border-radius: 50%;
-    top: 7px;
-    left: 20px;
-    opacity: .7; }
-  .game__ball .shadow {
-    background: #000;
-    width: 30px;
-    height: 30px;
-    position: absolute;
-    border-radius: 50%;
-    top: 8px;
-    left: 10px; }
+  border: 1px dotted #fff;
+  z-index: 15;
+  animation-name: ball-spinning;
+  animation-timing-function: linear;
+  animation-duration: 2s;
+  animation-iteration-count: infinite; }
 
 .game__obstacle {
   background: #000;
@@ -77,6 +65,7 @@ body {
   width: 50%;
   height: 550px;
   border-radius: 100px;
+  border: 2px dotted #000;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -93,6 +82,7 @@ body {
   width: 50%;
   height: 550px;
   border-radius: 100px;
+  border: 2px dotted #000;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -179,6 +169,18 @@ body {
   bottom: 10px;
   right: 20px;
   color: #fff; }
+
+.stop-animation {
+  animation-name: none; }
+
+.start-animation {
+  animation-name: ball-spinning; }
+
+@keyframes ball-spinning {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(-360deg); } }
 
 .start-decor_one {
   width: 200px;
@@ -442,9 +444,7 @@ body {
     color: #fff;
     background: #000; }
   .control-panel {
-    display: flex; }
-  .flare, .shadow {
-    display: none !important; } }
+    display: flex; } }
 
 @media screen and (max-width: 769px) {
   .media-close {
@@ -482,10 +482,9 @@ body {
     height: 330px;
     width: 70%;
     font-size: 16px; }
-  .btn {
-    font-size: 16px;
-    padding: 2px 5px; }
-  .btn-quantity {
+  .game__ball {
+    animation-duration: 1.5s !important; }
+  .btn, .btn-quantity {
     font-size: 16px !important;
     padding: 2px 5px !important; }
   .counter {
@@ -498,22 +497,15 @@ body {
     margin: 10px !important; }
   h2 {
     font-size: 18px !important; }
-  .media-close {
-    display: none; }
-  .start-decor_three {
-    display: none !important; }
-  .flare, .shadow {
-    display: none !important; }
   .game__window {
     height: 300px; }
   .game__popup, .game__menu {
     height: 330px;
     width: 70%;
     font-size: 16px; }
-  .btn {
-    font-size: 16px;
-    padding: 2px 5px; }
-  .btn-quantity {
+  .game__ball {
+    animation-duration: 1.5s !important; }
+  .btn, .btn-quantity {
     font-size: 16px !important;
     padding: 2px 5px !important; }
   .counter {

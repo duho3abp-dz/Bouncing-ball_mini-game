@@ -689,10 +689,6 @@ const game = ({
         </div>
         
     `;
-    gameBall.innerHTML = `
-        <div class="flare"></div>
-        <div class="shadow"></div>
-    `;
 
     document.body.append(popup);
     document.body.append(barriers);
@@ -909,6 +905,10 @@ const animateBallUp = ({
 const testAnimate = (element, ballHeight, speed, maxHeight, descent) => {
     const bottom = element.style.bottom.replace(/px/, '');
     if (element.style.bottom === '0px' || element.style.bottom === '' || +bottom <= 0) {
+
+        element.classList.add('stop-animation');
+        element.classList.remove('start-animation');
+        
         requestAnimationFrame(() => animateBallUp({
             ballHeight,
             element,
@@ -1064,6 +1064,8 @@ const ballPhysics = (element, ballHeight) => {
             requestAnimationFrame(returnToNormal)
         } else {
             setChangesStyle(heightBallLand, radiusBallLand);
+            element.classList.add('start-animation');
+            element.classList.remove('stop-animation');
         }
     };
 

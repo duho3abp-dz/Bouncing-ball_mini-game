@@ -19,6 +19,8 @@ const ballPhysics = (element, ballHeight) => {
             requestAnimationFrame(returnToNormal)
         } else {
             setChangesStyle(heightBallLand, radiusBallLand);
+            element.classList.add('start-animation');
+            element.classList.remove('stop-animation');
         }
     };
 
