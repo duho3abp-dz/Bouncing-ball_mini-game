@@ -1,4 +1,4 @@
-### BOUNCING BALL
+# BOUNCING BALL
 
 ## Description
 
